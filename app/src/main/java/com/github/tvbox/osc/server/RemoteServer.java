@@ -34,7 +34,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -48,12 +50,12 @@ import fi.iki.elonen.NanoHTTPD;
  * @description:
  */
 public class RemoteServer extends NanoHTTPD {
-    private Context mContext;
+    private final Context mContext;
     public static int serverPort = 9978;
     private boolean isStarted = false;
     private DataReceiver mDataReceiver;
-    private ArrayList<RequestProcess> getRequestList = new ArrayList<>();
-    private ArrayList<RequestProcess> postRequestList = new ArrayList<>();
+    private final ArrayList<RequestProcess> getRequestList = new ArrayList<>();
+    private final ArrayList<RequestProcess> postRequestList = new ArrayList<>();
 
     public RemoteServer(int port, Context context) {
         super(port);
@@ -141,7 +143,7 @@ public class RemoteServer extends NanoHTTPD {
                     }
                 } else if (fileName.equals("/dns-query")) {
                     String name = session.getParms().get("name");
-                    byte[] rs = null;
+                    byte[] rs;
                     try {
                         rs = OkGoHelper.dnsOverHttps.lookupHttpsForwardSync(name);
                     } catch (Throwable th) {
@@ -150,7 +152,7 @@ public class RemoteServer extends NanoHTTPD {
                     return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/dns-message", new ByteArrayInputStream(rs), rs.length);
                 }
             } else if (session.getMethod() == Method.POST) {
-                Map<String, String> files = new HashMap<String, String>();
+                Map<String, String> files = new HashMap<>();
                 try {
                     if (session.getHeaders().containsKey("content-type")) {
                         String hd = session.getHeaders().get("content-type");
@@ -270,7 +272,7 @@ public class RemoteServer extends NanoHTTPD {
 
     @SuppressLint("DefaultLocale")
     public static String getLocalIPAddress(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
         if (ipAddress == 0) {
             try {
@@ -301,7 +303,7 @@ public class RemoteServer extends NanoHTTPD {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
         Date date = calendar.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat(fmt);
+        SimpleDateFormat sdf = new SimpleDateFormat(fmt, Locale.CHINESE);
         return sdf.format(date);
     }
 
@@ -314,18 +316,15 @@ public class RemoteServer extends NanoHTTPD {
         if (path.isEmpty()) {
             info.addProperty("parent", ".");
         } else {
-            info.addProperty("parent", file.getParentFile().getAbsolutePath().replace(root + "/", "").replace(root, ""));
+            info.addProperty("parent", Objects.requireNonNull(file.getParentFile()).getAbsolutePath().replace(root + "/", "").replace(root, ""));
         }
         if (list == null || list.length == 0) {
             info.add("files", new JsonArray());
             return info.toString();
         }
-        Arrays.sort(list, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                if (o1.isDirectory() && o2.isFile()) return -1;
-                return o1.isFile() && o2.isDirectory() ? 1 : o1.getName().compareTo(o2.getName());
-            }
+        Arrays.sort(list, (o1, o2) -> {
+            if (o1.isDirectory() && o2.isFile()) return -1;
+            return o1.isFile() && o2.isDirectory() ? 1 : o1.getName().compareTo(o2.getName());
         });
         JsonArray result = new JsonArray();
         for (File f : list) {

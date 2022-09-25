@@ -1,5 +1,7 @@
 package com.github.tvbox.osc.data;
 
+import android.annotation.SuppressLint;
+import android.app.Application;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 
@@ -14,6 +16,7 @@ import com.github.tvbox.osc.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 
 /**
@@ -53,6 +56,7 @@ public class AppDataManager {
     };
 
     static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @SuppressLint("Range")
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS `vodRecordTmp` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `vodId` TEXT, `updateTime` INTEGER NOT NULL, `sourceKey` TEXT, `data` BLOB, `dataJson` TEXT, `testMigration` INTEGER NOT NULL)");
@@ -142,7 +146,7 @@ public class AppDataManager {
         if (dbInstance != null && dbInstance.isOpen()) {
             dbInstance.close();
         }
-        File db = App.getInstance().getDatabasePath(dbPath());
+        File db = App.getInstance().getApplicationContext().getDatabasePath(dbPath());
         if (db.exists()) {
             FileUtils.copyFile(db, path);
             return true;
@@ -159,7 +163,7 @@ public class AppDataManager {
         if (db.exists()) {
             db.delete();
         }
-        if (!db.getParentFile().exists())
+        if (!Objects.requireNonNull(db.getParentFile()).exists())
             db.getParentFile().mkdirs();
         FileUtils.copyFile(path, db);
         return true;

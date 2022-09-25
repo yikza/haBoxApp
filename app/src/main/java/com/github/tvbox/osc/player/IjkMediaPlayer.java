@@ -13,7 +13,7 @@ import xyz.doikki.videoplayer.ijk.IjkPlayer;
 
 public class IjkMediaPlayer extends IjkPlayer {
 
-    private IJKCode codec = null;
+    private final IJKCode codec;
 
     public IjkMediaPlayer(Context context, IJKCode codec) {
         super(context);
@@ -32,6 +32,7 @@ public class IjkMediaPlayer extends IjkPlayer {
                 int category = Integer.parseInt(opt[0].trim());
                 String name = opt[1].trim();
                 try {
+                    assert value != null;
                     long valLong = Long.parseLong(value);
                     mMediaPlayer.setOption(category, name, valLong);
                 } catch (Exception e) {

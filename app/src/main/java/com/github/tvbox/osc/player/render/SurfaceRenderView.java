@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -15,7 +16,7 @@ import xyz.doikki.videoplayer.render.IRenderView;
 import xyz.doikki.videoplayer.render.MeasureHelper;
 
 public class SurfaceRenderView extends SurfaceView implements IRenderView, SurfaceHolder.Callback {
-    private MeasureHelper mMeasureHelper;
+    private final MeasureHelper mMeasureHelper;
 
     private AbstractPlayer mMediaPlayer;
 
@@ -93,6 +94,7 @@ public class SurfaceRenderView extends SurfaceView implements IRenderView, Surfa
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         if (mMediaPlayer != null) {
             mMediaPlayer.setDisplay(holder);
+            Log.i("mm:", "setDisplay");
         }
     }
 

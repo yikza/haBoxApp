@@ -1,6 +1,7 @@
 package com.github.tvbox.osc.server;
 
 import java.util.Map;
+import java.util.Objects;
 
 import fi.iki.elonen.NanoHTTPD;
 
@@ -11,7 +12,7 @@ import fi.iki.elonen.NanoHTTPD;
  */
 
 public class InputRequestProcess implements RequestProcess {
-    private RemoteServer remoteServer;
+    private final RemoteServer remoteServer;
 
     public InputRequestProcess(RemoteServer remoteServer) {
         this.remoteServer = remoteServer;
@@ -36,18 +37,18 @@ public class InputRequestProcess implements RequestProcess {
                 if (params.get("do") != null && mDataReceiver != null) {
                     String action = params.get("do");
 
-                    switch (action) {
+                    switch (Objects.requireNonNull(action)) {
                         case "search": {
-                            mDataReceiver.onTextReceived(params.get("word").trim());
+                            mDataReceiver.onTextReceived(Objects.requireNonNull(params.get("word")).trim());
                             break;
                         }
                         case "api": {
-                            mDataReceiver.onApiReceived(params.get("url").trim());
+                            mDataReceiver.onApiReceived(Objects.requireNonNull(params.get("url")).trim());
                             break;
                         }
                         case "push": {
                             // 暂未实现
-                            mDataReceiver.onPushReceived(params.get("url").trim());
+                            mDataReceiver.onPushReceived(Objects.requireNonNull(params.get("url")).trim());
                             break;
                         }
                     }

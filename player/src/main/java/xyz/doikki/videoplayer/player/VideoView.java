@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,7 +126,7 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
     /**
      * {@link #mPlayerContainer}背景色，默认黑色
      */
-    private int mPlayerBackgroundColor;
+    private final int mPlayerBackgroundColor;
 
     public VideoView(@NonNull Context context) {
         this(context, null);

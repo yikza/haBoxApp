@@ -43,7 +43,7 @@ public class ControlManager {
     }
 
     public static void init(Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
     }
 
     public String getAddress(boolean local) {
@@ -83,7 +83,7 @@ public class ControlManager {
             });
             try {
                 mServer.start();
-                IjkMediaPlayer.setDotPort(Hawk.get(HawkConfig.DOH_URL, 0) > 0, RemoteServer.serverPort);
+                //IjkMediaPlayer.setDotPort(Hawk.get(HawkConfig.DOH_URL, 0) > 0, RemoteServer.serverPort);
                 break;
             } catch (IOException ex) {
                 RemoteServer.serverPort++;

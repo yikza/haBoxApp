@@ -20,6 +20,10 @@ public class JarLoader {
     private ConcurrentHashMap<String, Spider> spiders = new ConcurrentHashMap<>();
     private Method proxyFun = null;
 
+    public DexClassLoader getClassLoader () {
+        return classLoader;
+    }
+
     /**
      * 不要在主线程调用我
      *
@@ -42,7 +46,7 @@ public class JarLoader {
                     if (classInit != null) {
                         Method method = classInit.getMethod("init", Context.class);
                         method.invoke(null, App.getInstance());
-                        System.out.println("自定义爬虫代码加载成功!");
+                        //System.out.println("自定义爬虫代码加载成功!");
                         success = true;
                         try {
                             Class proxy = classLoader.loadClass("com.github.catvod.spider.Proxy");

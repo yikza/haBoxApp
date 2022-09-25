@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.github.tvbox.osc.base.App;
 import com.github.tvbox.osc.data.AppDataManager;
 import com.github.tvbox.osc.ui.adapter.BackupAdapter;
 import com.github.tvbox.osc.util.FileUtils;
+import com.github.tvbox.osc.util.LOG;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
@@ -94,6 +96,9 @@ public class BackupDialog extends BaseDialog {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath();
             File file = new File(root + "/tvbox_backup/");
             File[] list = file.listFiles();
+            if (list == null) {
+                return result;
+            }
             Arrays.sort(list, new Comparator<File>() {
                 @Override
                 public int compare(File o1, File o2) {
@@ -156,11 +161,12 @@ public class BackupDialog extends BaseDialog {
     void backup() {
         try {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath();
+            Log.i("backup", root);
             File file = new File(root + "/tvbox_backup/");
             if (!file.exists())
                 file.mkdirs();
             Date now = new Date();
-            SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd-HHmmss");
+            SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
             File backup = new File(file, f.format(now));
             backup.mkdirs();
             File db = new File(backup, "sqlite");

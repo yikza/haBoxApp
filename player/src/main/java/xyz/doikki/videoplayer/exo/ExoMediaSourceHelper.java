@@ -6,16 +6,16 @@ import android.text.TextUtils;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.database.ExoDatabaseProvider;
+import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSource;
-import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
+import com.google.android.exoplayer2.ext.rtmp.RtmpDataSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.rtsp.RtspMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
@@ -24,14 +24,15 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 
 public final class ExoMediaSourceHelper {
 
-    private static ExoMediaSourceHelper sInstance;
+    private static volatile ExoMediaSourceHelper sInstance;
 
     private final String mUserAgent;
     private final Context mAppContext;
@@ -74,7 +75,7 @@ public final class ExoMediaSourceHelper {
     public MediaSource getMediaSource(String uri, Map<String, String> headers, boolean isCache) {
         Uri contentUri = Uri.parse(uri);
         if ("rtmp".equals(contentUri.getScheme())) {
-            return new ProgressiveMediaSource.Factory(new RtmpDataSourceFactory(null))
+            return new ProgressiveMediaSource.Factory(new RtmpDataSource.Factory())
                     .createMediaSource(MediaItem.fromUri(contentUri));
         } else if ("rtsp".equals(contentUri.getScheme())) {
             return new RtspMediaSource.Factory().createMediaSource(MediaItem.fromUri(contentUri));
@@ -90,12 +91,12 @@ public final class ExoMediaSourceHelper {
             setHeaders(headers);
         }
         switch (contentType) {
-            case C.TYPE_DASH:
+            case C.CONTENT_TYPE_DASH:
                 return new DashMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(contentUri));
-            case C.TYPE_HLS:
+            case C.CONTENT_TYPE_HLS:
                 return new HlsMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(contentUri));
             default:
-            case C.TYPE_OTHER:
+            case C.CONTENT_TYPE_OTHER:
                 return new ProgressiveMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(contentUri));
         }
     }
@@ -103,11 +104,11 @@ public final class ExoMediaSourceHelper {
     private int inferContentType(String fileName) {
         fileName = fileName.toLowerCase();
         if (fileName.contains(".mpd")) {
-            return C.TYPE_DASH;
+            return C.CONTENT_TYPE_DASH;
         } else if (fileName.contains(".m3u8")) {
-            return C.TYPE_HLS;
+            return C.CONTENT_TYPE_HLS;
         } else {
-            return C.TYPE_OTHER;
+            return C.CONTENT_TYPE_OTHER;
         }
     }
 
@@ -125,7 +126,7 @@ public final class ExoMediaSourceHelper {
         return new SimpleCache(
                 new File(mAppContext.getExternalCacheDir(), "exo-video-cache"),//缓存目录
                 new LeastRecentlyUsedCacheEvictor(512 * 1024 * 1024),//缓存大小，默认512M，使用LRU算法实现
-                new ExoDatabaseProvider(mAppContext));
+                new StandaloneDatabaseProvider(mAppContext));
     }
 
     /**
@@ -134,7 +135,7 @@ public final class ExoMediaSourceHelper {
      * @return A new DataSource factory.
      */
     private DataSource.Factory getDataSourceFactory() {
-        return new DefaultDataSourceFactory(mAppContext, getHttpDataSourceFactory());
+        return new DefaultDataSource.Factory(mAppContext, getHttpDataSourceFactory());
     }
 
     /**
@@ -144,7 +145,7 @@ public final class ExoMediaSourceHelper {
      */
     private DataSource.Factory getHttpDataSourceFactory() {
         if (mHttpDataSourceFactory == null) {
-            mHttpDataSourceFactory = new OkHttpDataSource.Factory(mOkClient)
+            mHttpDataSourceFactory = new OkHttpDataSource.Factory((Call.Factory) mOkClient)
                     .setUserAgent(mUserAgent)/*
                     .setAllowCrossProtocolRedirects(true)*/;
         }
@@ -160,15 +161,13 @@ public final class ExoMediaSourceHelper {
                     try {
                         Field userAgentField = mHttpDataSourceFactory.getClass().getDeclaredField("userAgent");
                         userAgentField.setAccessible(true);
-                        userAgentField.set(mHttpDataSourceFactory, value.trim());
+                        userAgentField.set(mHttpDataSourceFactory, Objects.requireNonNull(value).trim());
                     } catch (Exception e) {
                         //ignore
                     }
                 }
             }
-            Iterator<String> iter = headers.keySet().iterator();
-            while (iter.hasNext()) {
-                String k = iter.next();
+            for (String k : headers.keySet()) {
                 String v = headers.get(k);
                 if (v != null)
                     headers.put(k, v.trim());

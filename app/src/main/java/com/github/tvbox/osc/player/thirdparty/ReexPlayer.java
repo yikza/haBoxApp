@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ReexPlayer {
     public static final String TAG = "ThirdParty.Reex";
@@ -67,7 +68,7 @@ public class ReexPlayer {
             try {
                 JSONObject json = new JSONObject();
                 for (String key : headers.keySet()) {
-                    json.put(key, headers.get(key).trim());
+                    json.put(key, Objects.requireNonNull(headers.get(key)).trim());
                 }
                 intent.putExtra("reex.extra.http_header", json.toString());
             } catch (JSONException e) {

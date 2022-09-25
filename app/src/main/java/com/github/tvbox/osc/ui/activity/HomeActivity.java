@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Keep;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
@@ -44,6 +46,8 @@ import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.LOG;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
+import com.google.gson.Gson;
+import com.orhanobut.hawk.GsonParser;
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
@@ -57,27 +61,27 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import me.jessyan.autosize.utils.AutoSizeUtils;
 
 public class HomeActivity extends BaseActivity {
+    private TextView tvName;
     private LinearLayout topLayout;
-    private LinearLayout contentLayout;
     private TextView tvDate;
     private TvRecyclerView mGridView;
     private NoScrollViewPager mViewPager;
     private SourceViewModel sourceViewModel;
     private SortAdapter sortAdapter;
-    private HomePageAdapter pageAdapter;
-    private List<BaseLazyFragment> fragments = new ArrayList<>();
+    private final List<BaseLazyFragment> fragments = new ArrayList<>();
     private boolean isDownOrUp = false;
     private boolean sortChange = false;
     private int currentSelected = 0;
     private int sortFocused = 0;
     public View sortFocusView = null;
-    private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler();
     private long mExitTime = 0;
-    private Runnable mRunnable = new Runnable() {
+    private final Runnable mRunnable = new Runnable() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         @Override
         public void run() {
@@ -112,9 +116,10 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initView() {
+        this.tvName = findViewById(R.id.tvName);
         this.topLayout = findViewById(R.id.topLayout);
         this.tvDate = findViewById(R.id.tvDate);
-        this.contentLayout = findViewById(R.id.contentLayout);
+        LinearLayout contentLayout = findViewById(R.id.contentLayout);
         this.mGridView = findViewById(R.id.mGridView);
         this.mViewPager = findViewById(R.id.mViewPager);
         this.sortAdapter = new SortAdapter();
@@ -142,7 +147,7 @@ public class HomeActivity extends BaseActivity {
                     textView.getPaint().setFakeBoldText(true);
                     textView.setTextColor(HomeActivity.this.getResources().getColor(R.color.color_FFFFFF));
                     textView.invalidate();
-                    if (!sortAdapter.getItem(position).filters.isEmpty())
+                    if (!Objects.requireNonNull(sortAdapter.getItem(position)).filters.isEmpty())
                         view.findViewById(R.id.tvFilter).setVisibility(View.VISIBLE);
                     HomeActivity.this.sortFocusView = view;
                     HomeActivity.this.sortFocused = position;
@@ -153,7 +158,7 @@ public class HomeActivity extends BaseActivity {
 
             @Override
             public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-                if (itemView != null && currentSelected == position && !sortAdapter.getItem(position).filters.isEmpty()) { // 弹出筛选
+                if (itemView != null && currentSelected == position && !Objects.requireNonNull(sortAdapter.getItem(position)).filters.isEmpty()) { // 弹出筛选
                     BaseLazyFragment baseLazyFragment = fragments.get(currentSelected);
                     if ((baseLazyFragment instanceof GridFragment)) {
                         ((GridFragment) baseLazyFragment).showFilter();
@@ -161,39 +166,31 @@ public class HomeActivity extends BaseActivity {
                 }
             }
         });
-        this.mGridView.setOnInBorderKeyEventListener(new TvRecyclerView.OnInBorderKeyEventListener() {
-            public final boolean onInBorderKeyEvent(int direction, View view) {
-                if (direction != View.FOCUS_DOWN) {
-                    return false;
-                }
-                isDownOrUp = true;
-                BaseLazyFragment baseLazyFragment = fragments.get(sortFocused);
-                if (!(baseLazyFragment instanceof GridFragment)) {
-                    return false;
-                }
-                if (!((GridFragment) baseLazyFragment).isLoad()) {
-                    return true;
-                }
+        this.mGridView.setOnInBorderKeyEventListener((direction, view) -> {
+            if (direction != View.FOCUS_DOWN) {
                 return false;
             }
+            isDownOrUp = true;
+            BaseLazyFragment baseLazyFragment = fragments.get(sortFocused);
+            if (!(baseLazyFragment instanceof GridFragment)) {
+                return false;
+            }
+            return !((GridFragment) baseLazyFragment).isLoad();
         });
-        setLoadSir(this.contentLayout);
+        setLoadSir(contentLayout);
         //mHandler.postDelayed(mFindFocus, 500);
     }
 
     private void initViewModel() {
         sourceViewModel = new ViewModelProvider(this).get(SourceViewModel.class);
-        sourceViewModel.sortResult.observe(this, new Observer<AbsSortXml>() {
-            @Override
-            public void onChanged(AbsSortXml absXml) {
-                showSuccess();
-                if (absXml != null && absXml.classes != null && absXml.classes.sortList != null) {
-                    sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), absXml.classes.sortList, true));
-                } else {
-                    sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), new ArrayList<>(), true));
-                }
-                initViewPager(absXml);
+        sourceViewModel.sortResult.observe(this, absXml -> {
+            showSuccess();
+            if (absXml != null && absXml.classes != null && absXml.classes.sortList != null) {
+                sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), absXml.classes.sortList, true));
+            } else {
+                sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), new ArrayList<>(), true));
             }
+            initViewPager(absXml);
         });
     }
 
@@ -201,14 +198,17 @@ public class HomeActivity extends BaseActivity {
     private boolean jarInitOk = false;
 
     private void initData() {
+        String sourceName = ApiConfig.get().getHomeSourceBean().getName();
+        if (sourceName == null) {
+            sourceName = "TVBox";
+        }
+        this.tvName.setText(sourceName);
+        //if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            //Toast.makeText(HomeActivity.this, "存储读写权限已获得", Toast.LENGTH_SHORT).show();
+        //}
         if (dataInitOk && jarInitOk) {
             showLoading();
             sourceViewModel.getSort(ApiConfig.get().getHomeSourceBean().getKey());
-            if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                LOG.e("有");
-            } else {
-                LOG.e("无");
-            }
             return;
         }
         showLoading();
@@ -218,13 +218,10 @@ public class HomeActivity extends BaseActivity {
                     @Override
                     public void success() {
                         jarInitOk = true;
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!useCacheConfig)
-                                    Toast.makeText(HomeActivity.this, "自定义jar加载成功", Toast.LENGTH_SHORT).show();
-                                initData();
-                            }
+                        mHandler.postDelayed(() -> {
+                            //if (!useCacheConfig)
+                            //    Toast.makeText(HomeActivity.this, "自定义jar加载成功", Toast.LENGTH_SHORT).show();
+                            initData();
                         }, 50);
                     }
 
@@ -236,12 +233,9 @@ public class HomeActivity extends BaseActivity {
                     @Override
                     public void error(String msg) {
                         jarInitOk = true;
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(HomeActivity.this, "jar加载失败", Toast.LENGTH_SHORT).show();
-                                initData();
-                            }
+                        mHandler.post(() -> {
+                            Toast.makeText(HomeActivity.this, "jar加载失败"+msg, Toast.LENGTH_SHORT).show();
+                            initData();
                         });
                     }
                 });
@@ -253,12 +247,7 @@ public class HomeActivity extends BaseActivity {
 
             @Override
             public void retry() {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        initData();
-                    }
-                });
+                mHandler.post(() -> initData());
             }
 
             @Override
@@ -267,72 +256,52 @@ public class HomeActivity extends BaseActivity {
                 if (ApiConfig.get().getSpider().isEmpty()) {
                     jarInitOk = true;
                 }
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        initData();
-                    }
-                }, 50);
+                mHandler.postDelayed(() -> initData(), 50);
             }
 
             @Override
             public void error(String msg) {
                 if (msg.equalsIgnoreCase("-1")) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            dataInitOk = true;
-                            jarInitOk = true;
-                            initData();
-                        }
+                    mHandler.post(() -> {
+                        dataInitOk = true;
+                        jarInitOk = true;
+                        initData();
                     });
                     return;
                 }
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (dialog == null)
-                            dialog = new TipDialog(HomeActivity.this, msg, "重试", "取消", new TipDialog.OnListener() {
-                                @Override
-                                public void left() {
-                                    mHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            initData();
-                                            dialog.hide();
-                                        }
-                                    });
-                                }
+                mHandler.post(() -> {
+                    if (dialog == null)
+                        dialog = new TipDialog(HomeActivity.this, msg, "重试", "取消", new TipDialog.OnListener() {
+                            @Override
+                            public void left() {
+                                mHandler.post(() -> {
+                                    initData();
+                                    dialog.hide();
+                                });
+                            }
 
-                                @Override
-                                public void right() {
-                                    dataInitOk = true;
-                                    jarInitOk = true;
-                                    mHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            initData();
-                                            dialog.hide();
-                                        }
-                                    });
-                                }
+                            @Override
+                            public void right() {
+                                dataInitOk = true;
+                                jarInitOk = true;
+                                mHandler.post(() -> {
+                                    initData();
+                                    dialog.hide();
+                                });
+                            }
 
-                                @Override
-                                public void cancel() {
-                                    dataInitOk = true;
-                                    jarInitOk = true;
-                                    mHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            initData();
-                                            dialog.hide();
-                                        }
-                                    });
-                                }
-                            });
-                        if (!dialog.isShowing())
-                            dialog.show();
-                    }
+                            @Override
+                            public void cancel() {
+                                dataInitOk = true;
+                                jarInitOk = true;
+                                mHandler.post(() -> {
+                                    initData();
+                                    dialog.hide();
+                                });
+                            }
+                        });
+                    if (!dialog.isShowing())
+                        dialog.show();
                 });
             }
         }, this);
@@ -351,14 +320,14 @@ public class HomeActivity extends BaseActivity {
                     fragments.add(GridFragment.newInstance(data));
                 }
             }
-            pageAdapter = new HomePageAdapter(getSupportFragmentManager(), fragments);
+            HomePageAdapter pageAdapter = new HomePageAdapter(getSupportFragmentManager(), fragments);
             try {
                 Field field = ViewPager.class.getDeclaredField("mScroller");
                 field.setAccessible(true);
                 FixedSpeedScroller scroller = new FixedSpeedScroller(mContext, new AccelerateInterpolator());
                 field.set(mViewPager, scroller);
                 scroller.setmDuration(300);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             mViewPager.setPageTransformer(true, new DefaultTransformer());
             mViewPager.setAdapter(pageAdapter);
@@ -423,7 +392,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private Runnable mDataRunnable = new Runnable() {
+    private final Runnable mDataRunnable = new Runnable() {
         @Override
         public void run() {
             if (sortChange) {
@@ -431,11 +400,7 @@ public class HomeActivity extends BaseActivity {
                 if (sortFocused != currentSelected) {
                     currentSelected = sortFocused;
                     mViewPager.setCurrentItem(sortFocused, false);
-                    if (sortFocused == 0) {
-                        changeTop(false);
-                    } else {
-                        changeTop(true);
-                    }
+                    changeTop(sortFocused != 0);
                 }
             }
         }
@@ -443,18 +408,21 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (topHide < 0)
+        if (topHide < 0) {
             return false;
+        }
+        /*
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
 
-        }
+        }**/
         return super.dispatchKeyEvent(event);
     }
 
     byte topHide = 0;
 
+    @Keep
     private void changeTop(boolean hide) {
         ViewObj viewObj = new ViewObj(topLayout, (ViewGroup.MarginLayoutParams) topLayout.getLayoutParams());
         AnimatorSet animatorSet = new AnimatorSet();
@@ -480,38 +448,27 @@ public class HomeActivity extends BaseActivity {
             }
         });
         if (hide && topHide == 0) {
-            animatorSet.playTogether(new Animator[]{
-                    ObjectAnimator.ofObject(viewObj, "marginTop", new IntEvaluator(),
-                            new Object[]{
-                                    Integer.valueOf(AutoSizeUtils.mm2px(this.mContext, 10.0f)),
-                                    Integer.valueOf(AutoSizeUtils.mm2px(this.mContext, 0.0f))
-                            }),
+            animatorSet.playTogether(ObjectAnimator.ofObject(viewObj, "marginTop", new IntEvaluator(),
+                            AutoSizeUtils.mm2px(this.mContext, 10.0f),
+                            AutoSizeUtils.mm2px(this.mContext, 0.0f)),
                     ObjectAnimator.ofObject(viewObj, "height", new IntEvaluator(),
-                            new Object[]{
-                                    Integer.valueOf(AutoSizeUtils.mm2px(this.mContext, 50.0f)),
-                                    Integer.valueOf(AutoSizeUtils.mm2px(this.mContext, 1.0f))
-                            }),
-                    ObjectAnimator.ofFloat(this.topLayout, "alpha", new float[]{1.0f, 0.0f})});
+                            AutoSizeUtils.mm2px(this.mContext, 50.0f),
+                            AutoSizeUtils.mm2px(this.mContext, 1.0f)),
+                    ObjectAnimator.ofFloat(this.topLayout, "alpha", 1.0f, 0.0f));
             animatorSet.setDuration(200);
             animatorSet.start();
             return;
         }
         if (!hide && topHide == 1) {
-            animatorSet.playTogether(new Animator[]{
-                    ObjectAnimator.ofObject(viewObj, "marginTop", new IntEvaluator(),
-                            new Object[]{
-                                    Integer.valueOf(AutoSizeUtils.mm2px(this.mContext, 0.0f)),
-                                    Integer.valueOf(AutoSizeUtils.mm2px(this.mContext, 10.0f))
-                            }),
+            animatorSet.playTogether(ObjectAnimator.ofObject(viewObj, "marginTop", new IntEvaluator(),
+                            AutoSizeUtils.mm2px(this.mContext, 0.0f),
+                            AutoSizeUtils.mm2px(this.mContext, 10.0f)),
                     ObjectAnimator.ofObject(viewObj, "height", new IntEvaluator(),
-                            new Object[]{
-                                    Integer.valueOf(AutoSizeUtils.mm2px(this.mContext, 1.0f)),
-                                    Integer.valueOf(AutoSizeUtils.mm2px(this.mContext, 50.0f))
-                            }),
-                    ObjectAnimator.ofFloat(this.topLayout, "alpha", new float[]{0.0f, 1.0f})});
+                            AutoSizeUtils.mm2px(this.mContext, 1.0f),
+                            AutoSizeUtils.mm2px(this.mContext, 50.0f)),
+                    ObjectAnimator.ofFloat(this.topLayout, "alpha", 0.0f, 1.0f));
             animatorSet.setDuration(200);
             animatorSet.start();
-            return;
         }
     }
 

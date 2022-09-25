@@ -51,8 +51,8 @@ public class FileUtils {
                 os.write(buffer, 0, length);
             }
         } finally {
-            is.close();
-            os.close();
+            if (is != null) is.close();
+            if (os != null) os.close();
         }
     }
 

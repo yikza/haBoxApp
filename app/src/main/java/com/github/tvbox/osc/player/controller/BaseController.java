@@ -56,29 +56,26 @@ public abstract class BaseController extends BaseVideoController implements Gest
 
     public BaseController(@NonNull Context context) {
         super(context);
-        mHandler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(@NonNull Message msg) {
-                int what = msg.what;
-                switch (what) {
-                    case 100: { // 亮度+音量调整
-                        mSlideInfo.setVisibility(VISIBLE);
-                        mSlideInfo.setText(msg.obj.toString());
-                        break;
-                    }
-
-                    case 101: { // 亮度+音量调整 关闭
-                        mSlideInfo.setVisibility(GONE);
-                        break;
-                    }
-                    default: {
-                        if (mHandlerCallback != null)
-                            mHandlerCallback.callback(msg);
-                        break;
-                    }
+        mHandler = new Handler(msg -> {
+            int what = msg.what;
+            switch (what) {
+                case 100: { // 亮度+音量调整
+                    mSlideInfo.setVisibility(VISIBLE);
+                    mSlideInfo.setText(msg.obj.toString());
+                    break;
                 }
-                return false;
+
+                case 101: { // 亮度+音量调整 关闭
+                    mSlideInfo.setVisibility(GONE);
+                    break;
+                }
+                default: {
+                    if (mHandlerCallback != null)
+                        mHandlerCallback.callback(msg);
+                    break;
+                }
             }
+            return false;
         });
     }
 
@@ -325,7 +322,7 @@ public abstract class BaseController extends BaseVideoController implements Gest
         WindowManager.LayoutParams attributes = window.getAttributes();
         int height = getMeasuredHeight();
         if (mBrightness == -1.0f) mBrightness = 0.5f;
-        float brightness = deltaY * 2 / height * 1.0f + mBrightness;
+        float brightness = deltaY * 2 / height + mBrightness;
         if (brightness < 0) {
             brightness = 0f;
         }

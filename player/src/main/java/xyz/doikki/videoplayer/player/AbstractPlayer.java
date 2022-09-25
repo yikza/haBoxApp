@@ -4,6 +4,8 @@ import android.content.res.AssetFileDescriptor;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
+import com.google.android.exoplayer2.ExoPlaybackException;
+
 import java.util.Map;
 
 /**

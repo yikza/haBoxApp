@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
+import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -83,6 +84,7 @@ public class TextureRenderView extends TextureView implements IRenderView, Textu
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
+        Log.i("123", surfaceTexture.toString());
         if (mSurfaceTexture != null) {
             setSurfaceTexture(mSurfaceTexture);
         } else {

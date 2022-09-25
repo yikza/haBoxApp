@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 
 import com.github.catvod.crawler.JarLoader;
 import com.github.catvod.crawler.Spider;
@@ -34,6 +35,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -84,11 +86,14 @@ public class ApiConfig {
             callback.error("-1");
             return;
         }
-        File cache = new File(App.getInstance().getFilesDir().getAbsolutePath() + "/" + MD5.encode(apiUrl));
-        if (useCache && cache.exists()) {
+        String md5 = Uri.parse(apiUrl).getQueryParameter("md5");
+        File cache = new File(App.getInstance().getFilesDir().getAbsolutePath() + "/config.dat");
+        //Log.i("loadConfig", "md5:"+md5+",cache md5:"+MD5.getFileMd5(cache));
+        if (cache.exists() && MD5.getFileMd5(cache).equalsIgnoreCase(md5)) {
             try {
                 parseJson(apiUrl, cache);
                 callback.success();
+                Log.i("loadConfig", "use cache");
                 return;
             } catch (Throwable th) {
                 th.printStackTrace();
@@ -112,16 +117,17 @@ public class ApiConfig {
                                 if (cache.exists())
                                     cache.delete();
                                 FileOutputStream fos = new FileOutputStream(cache);
-                                fos.write(json.getBytes("UTF-8"));
+                                fos.write(json.getBytes(StandardCharsets.UTF_8));
                                 fos.flush();
                                 fos.close();
+                                //Log.i("loadConfig", "md5:"+MD5.getFileMd5(cache));
                             } catch (Throwable th) {
                                 th.printStackTrace();
                             }
                             callback.success();
                         } catch (Throwable th) {
                             th.printStackTrace();
-                            callback.error("解析配置失败");
+                            callback.error("解析配置失败:"+th.getMessage());
                         }
                     }
 
@@ -161,16 +167,13 @@ public class ApiConfig {
         String jarUrl = urls[0];
         String md5 = urls.length > 1 ? urls[1].trim() : "";
         File cache = new File(App.getInstance().getFilesDir().getAbsolutePath() + "/csp.jar");
-
-        if (!md5.isEmpty() || useCache) {
-            if (cache.exists() && (useCache || MD5.getFileMd5(cache).equalsIgnoreCase(md5))) {
-                if (jarLoader.load(cache.getAbsolutePath())) {
-                    callback.success();
-                } else {
-                    callback.error("");
-                }
-                return;
+        if (cache.exists() && MD5.getFileMd5(cache).equalsIgnoreCase(md5)) {
+            if (jarLoader.load(cache.getAbsolutePath())) {
+                callback.success();
+            } else {
+                callback.error("useCache");
             }
+            return;
         }
 
         OkGo.<File>get(jarUrl).execute(new AbsCallback<File>() {
@@ -195,23 +198,23 @@ public class ApiConfig {
                     if (jarLoader.load(response.body().getAbsolutePath())) {
                         callback.success();
                     } else {
-                        callback.error("");
+                        callback.error(response.body().getAbsolutePath());
                     }
                 } else {
-                    callback.error("");
+                    callback.error("写入配置文件失败");
                 }
             }
 
             @Override
             public void onError(Response<File> response) {
                 super.onError(response);
-                callback.error("");
+                callback.error(response.getException().getMessage());
             }
         });
     }
 
     private void parseJson(String apiUrl, File f) throws Throwable {
-        System.out.println("从本地缓存加载" + f.getAbsolutePath());
+        //System.out.println("从本地缓存加载" + f.getAbsolutePath());
         BufferedReader bReader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"));
         StringBuilder sb = new StringBuilder();
         String s = "";

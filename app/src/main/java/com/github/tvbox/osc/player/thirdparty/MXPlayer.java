@@ -12,6 +12,7 @@ import android.util.Log;
 import com.github.tvbox.osc.base.App;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class MXPlayer {
     public static final String TAG = "ThirdParty.MXPlayer";
@@ -88,7 +89,7 @@ public class MXPlayer {
             int idx = 0;
             for (String hk : headers.keySet()) {
                 hds[idx] = hk;
-                hds[idx + 1] = headers.get(hk).trim();
+                hds[idx + 1] = Objects.requireNonNull(headers.get(hk)).trim();
                 idx += 2;
             }
             intent.putExtra("headers", headers);

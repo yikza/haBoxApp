@@ -19,4 +19,6 @@ public class AbsSortXml implements Serializable {
     public Movie list;
 
     public List<Movie.Video> videoList;
+
+    public String message;
 }

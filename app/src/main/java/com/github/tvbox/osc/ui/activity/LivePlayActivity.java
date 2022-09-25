@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.IntEvaluator;
 import android.animation.ObjectAnimator;
+import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,8 +39,10 @@ import com.github.tvbox.osc.ui.dialog.LivePasswordDialog;
 import com.github.tvbox.osc.ui.tv.widget.ViewObj;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
+import com.github.tvbox.osc.util.MD5;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.stream.JsonReader;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.Response;
@@ -46,6 +50,11 @@ import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -787,6 +796,36 @@ public class LivePlayActivity extends BaseActivity {
     }
 
     public void loadProxyLives(String url) {
+        //Log.i("loadProxyLives", url);
+        String md5 = Uri.parse(url).getQueryParameter("md5");
+        File cache = new File(App.getInstance().getFilesDir().getAbsolutePath() + "/live.json");
+        if (cache.exists() && MD5.getFileMd5(cache).equalsIgnoreCase(md5)) {
+            try {
+                JsonArray livesArray = new Gson().fromJson(new JsonReader(new FileReader(cache)), JsonArray.class);
+                ApiConfig.get().loadLives(livesArray);
+            } catch (FileNotFoundException e) {
+                return;
+            }
+            List<LiveChannelGroup> list = ApiConfig.get().getChannelGroupList();
+            if (list.isEmpty()) {
+                Toast.makeText(App.getInstance(), "频道列表为空", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+            liveChannelGroupList.clear();
+            liveChannelGroupList.addAll(list);
+
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    LivePlayActivity.this.showSuccess();
+                    initLiveState();
+                }
+            });
+            Log.i("loadProxyLives", "use cache");
+            return;
+        }
+
         OkGo.<String>get(url).execute(new AbsCallback<String>() {
 
             @Override
@@ -804,8 +843,25 @@ public class LivePlayActivity extends BaseActivity {
                     finish();
                     return;
                 }
+
                 liveChannelGroupList.clear();
                 liveChannelGroupList.addAll(list);
+
+                File cacheDir = cache.getParentFile();
+                if (!cacheDir.exists())
+                    cacheDir.mkdirs();
+                if (cache.exists())
+                    cache.delete();
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(cache);
+                    fos.write(response.body().getBytes(StandardCharsets.UTF_8));
+                    fos.flush();
+                    fos.close();
+                    //Log.i("liveMd5", MD5.getFileMd5(cache));
+                } catch (Exception e) {
+                    Log.e("loadProxyLive:", e.getMessage());
+                }
 
                 mHandler.post(new Runnable() {
                     @Override

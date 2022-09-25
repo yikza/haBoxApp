@@ -125,18 +125,15 @@ public class VodController extends BaseController {
 
         mGridView.setLayoutManager(new V7LinearLayoutManager(getContext(), 0, false));
         ParseAdapter parseAdapter = new ParseAdapter();
-        parseAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ParseBean parseBean = parseAdapter.getItem(position);
-                // 当前默认解析需要刷新
-                int currentDefault = parseAdapter.getData().indexOf(ApiConfig.get().getDefaultParse());
-                parseAdapter.notifyItemChanged(currentDefault);
-                ApiConfig.get().setDefaultParse(parseBean);
-                parseAdapter.notifyItemChanged(position);
-                listener.changeParse(parseBean);
-                hideBottom();
-            }
+        parseAdapter.setOnItemClickListener((adapter, view, position) -> {
+            ParseBean parseBean = parseAdapter.getItem(position);
+            // 当前默认解析需要刷新
+            int currentDefault = parseAdapter.getData().indexOf(ApiConfig.get().getDefaultParse());
+            parseAdapter.notifyItemChanged(currentDefault);
+            ApiConfig.get().setDefaultParse(parseBean);
+            parseAdapter.notifyItemChanged(position);
+            listener.changeParse(parseBean);
+            hideBottom();
         });
         mGridView.setAdapter(parseAdapter);
         parseAdapter.setNewData(ApiConfig.get().getParseBeanList());
@@ -173,161 +170,131 @@ public class VodController extends BaseController {
                 mControlWrapper.startFadeOut();
             }
         });
-        mPlayerRetry.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mPlayerRetry.setOnClickListener(v -> {
+            listener.replay();
+            hideBottom();
+        });
+        mNextBtn.setOnClickListener(view -> {
+            listener.playNext(false);
+            hideBottom();
+        });
+        mPreBtn.setOnClickListener(view -> {
+            listener.playPre();
+            hideBottom();
+        });
+        mPlayerScaleBtn.setOnClickListener(view -> {
+            try {
+                int scaleType = mPlayerConfig.getInt("sc");
+                scaleType++;
+                if (scaleType > 5)
+                    scaleType = 0;
+                mPlayerConfig.put("sc", scaleType);
+                updatePlayerCfgView();
+                listener.updatePlayerCfg();
+                mControlWrapper.setScreenScaleType(scaleType);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        mPlayerSpeedBtn.setOnClickListener(view -> {
+            try {
+                float speed = (float) mPlayerConfig.getDouble("sp");
+                speed += 0.25f;
+                if (speed > 3)
+                    speed = 0.5f;
+                mPlayerConfig.put("sp", speed);
+                updatePlayerCfgView();
+                listener.updatePlayerCfg();
+                mControlWrapper.setSpeed(speed);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        mPlayerBtn.setOnClickListener(view -> {
+            try {
+                int playerType = mPlayerConfig.getInt("pl");
+                boolean playerVail = false;
+                do {
+                    playerType++;
+                    if (playerType <= 2) {
+                        playerVail = true;
+                    } else if (playerType == 10) {
+                        playerVail = mxPlayerExist;
+                    } else if (playerType == 11) {
+                        playerVail = reexPlayerExist;
+                    } else if (playerType > 11) {
+                        playerType = 0;
+                        playerVail = true;
+                    }
+                } while (!playerVail);
+                mPlayerConfig.put("pl", playerType);
+                updatePlayerCfgView();
+                listener.updatePlayerCfg();
+                listener.replay();
+                // hideBottom();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        mPlayerIJKBtn.setOnClickListener(view -> {
+            try {
+                String ijk = mPlayerConfig.getString("ijk");
+                List<IJKCode> codecs = ApiConfig.get().getIjkCodes();
+                for (int i = 0; i < codecs.size(); i++) {
+                    if (ijk.equals(codecs.get(i).getName())) {
+                        if (i >= codecs.size() - 1)
+                            ijk = codecs.get(0).getName();
+                        else {
+                            ijk = codecs.get(i + 1).getName();
+                        }
+                        break;
+                    }
+                }
+                mPlayerConfig.put("ijk", ijk);
+                updatePlayerCfgView();
+                listener.updatePlayerCfg();
                 listener.replay();
                 hideBottom();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
-        mNextBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.playNext(false);
-                hideBottom();
-            }
-        });
-        mPreBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.playPre();
-                hideBottom();
-            }
-        });
-        mPlayerScaleBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    int scaleType = mPlayerConfig.getInt("sc");
-                    scaleType++;
-                    if (scaleType > 5)
-                        scaleType = 0;
-                    mPlayerConfig.put("sc", scaleType);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                    mControlWrapper.setScreenScaleType(scaleType);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mPlayerSpeedBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    float speed = (float) mPlayerConfig.getDouble("sp");
-                    speed += 0.25f;
-                    if (speed > 3)
-                        speed = 0.5f;
-                    mPlayerConfig.put("sp", speed);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                    mControlWrapper.setSpeed(speed);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mPlayerBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    int playerType = mPlayerConfig.getInt("pl");
-                    boolean playerVail = false;
-                    do {
-                        playerType++;
-                        if (playerType <= 2) {
-                            playerVail = true;
-                        } else if (playerType == 10) {
-                            playerVail = mxPlayerExist;
-                        } else if (playerType == 11) {
-                            playerVail = reexPlayerExist;
-                        } else if (playerType > 11) {
-                            playerType = 0;
-                            playerVail = true;
-                        }
-                    } while (!playerVail);
-                    mPlayerConfig.put("pl", playerType);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                    listener.replay();
-                    // hideBottom();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mPlayerIJKBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    String ijk = mPlayerConfig.getString("ijk");
-                    List<IJKCode> codecs = ApiConfig.get().getIjkCodes();
-                    for (int i = 0; i < codecs.size(); i++) {
-                        if (ijk.equals(codecs.get(i).getName())) {
-                            if (i >= codecs.size() - 1)
-                                ijk = codecs.get(0).getName();
-                            else {
-                                ijk = codecs.get(i + 1).getName();
-                            }
-                            break;
-                        }
-                    }
-                    mPlayerConfig.put("ijk", ijk);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                    listener.replay();
-                    hideBottom();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mPlayerTimeStartBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
-                    int st = mPlayerConfig.getInt("st");
-                    st += step;
-                    if (st > 60 * 10)
-                        st = 0;
-                    mPlayerConfig.put("st", st);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mPlayerTimeSkipBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
-                    int et = mPlayerConfig.getInt("et");
-                    et += step;
-                    if (et > 60 * 10)
-                        et = 0;
-                    mPlayerConfig.put("et", et);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mPlayerTimeStepBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mPlayerTimeStartBtn.setOnClickListener(view -> {
+            try {
                 int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
-                step += 5;
-                if (step > 30) {
-                    step = 5;
-                }
-                Hawk.put(HawkConfig.PLAY_TIME_STEP, step);
+                int st = mPlayerConfig.getInt("st");
+                st += step;
+                if (st > 60 * 10)
+                    st = 0;
+                mPlayerConfig.put("st", st);
                 updatePlayerCfgView();
+                listener.updatePlayerCfg();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+        });
+        mPlayerTimeSkipBtn.setOnClickListener(view -> {
+            try {
+                int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
+                int et = mPlayerConfig.getInt("et");
+                et += step;
+                if (et > 60 * 10)
+                    et = 0;
+                mPlayerConfig.put("et", et);
+                updatePlayerCfgView();
+                listener.updatePlayerCfg();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        mPlayerTimeStepBtn.setOnClickListener(view -> {
+            int step = Hawk.get(HawkConfig.PLAY_TIME_STEP, 5);
+            step += 5;
+            if (step > 30) {
+                step = 5;
+            }
+            Hawk.put(HawkConfig.PLAY_TIME_STEP, step);
+            updatePlayerCfgView();
         });
     }
 
@@ -358,7 +325,7 @@ public class VodController extends BaseController {
             mPlayerBtn.setText(PlayerHelper.getPlayerName(playerType));
             mPlayerScaleBtn.setText(PlayerHelper.getScaleName(mPlayerConfig.getInt("sc")));
             mPlayerIJKBtn.setText(mPlayerConfig.getString("ijk"));
-            mPlayerIJKBtn.setVisibility(playerType == 1 ? VISIBLE : GONE);
+            mPlayerIJKBtn.setVisibility(playerType == 0 ? VISIBLE : GONE);
             mPlayerScaleBtn.setText(PlayerHelper.getScaleName(mPlayerConfig.getInt("sc")));
             mPlayerSpeedBtn.setText("x" + mPlayerConfig.getDouble("sp"));
             mPlayerTimeStartBtn.setText(PlayerUtils.stringForTime(mPlayerConfig.getInt("st") * 1000));
