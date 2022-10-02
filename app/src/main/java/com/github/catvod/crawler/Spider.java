@@ -1,15 +1,19 @@
 package com.github.catvod.crawler;
 
 import android.content.Context;
+import android.util.Base64;
 
-import com.github.tvbox.osc.util.OkGoHelper;
-
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
+import com.github.tvbox.osc.util.okhttp.OKCallBack;
+import com.github.tvbox.osc.util.okhttp.OkHttpUtil;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
-import okhttp3.Dns;
+import okhttp3.Call;
+import okhttp3.Headers;
+import okhttp3.Response;
 
 public abstract class Spider {
 
@@ -105,7 +109,54 @@ public abstract class Spider {
         return false;
     }
 
-    public static Dns safeDns() {
-        return OkGoHelper.dnsOverHttps;
+
+    public static String textUtilsJoin(CharSequence delimiter, Iterable tokens) {
+        final Iterator<?> it = tokens.iterator();
+        if (!it.hasNext()) {
+            return "";
+        }
+        final StringBuilder sb = new StringBuilder();
+        sb.append(it.next());
+        while (it.hasNext()) {
+            sb.append(delimiter);
+            sb.append(it.next());
+        }
+        return sb.toString();
+    }
+
+    public static Object[] loadPic(String refer, String pic) {
+        try {
+            pic = new String(Base64.decode(pic, Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP), "UTF-8");
+            OKCallBack.OKCallBackDefault callBack = new OKCallBack.OKCallBackDefault() {
+                @Override
+                protected void onFailure(Call call, Exception e) {}
+
+                @Override
+                protected void onResponse(Response response) {
+
+                }
+            };
+            HashMap<String, String> header = new HashMap<>();
+            header.put("referer", refer);
+            header.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.54 Safari/537.36");
+            OkHttpUtil.get(OkHttpUtil.defaultClient(), pic, null, header, callBack);
+            if (callBack.getResult().code() == 200) {
+                Headers headers = callBack.getResult().headers();
+                String type = headers.get("Content-Type");
+                if (type == null) {
+                    type = "application/octet-stream";
+                }
+                Object[] result = new Object[3];
+                result[0] = 200;
+                result[1] = type;
+                System.out.println(pic);
+                System.out.println(type);
+                result[2] = callBack.getResult().body().byteStream();
+                return result;
+            }
+        } catch (Throwable th) {
+            th.printStackTrace();
+        }
+        return null;
     }
 }

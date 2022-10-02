@@ -307,8 +307,8 @@ public class LivePlayActivity extends BaseActivity {
     private boolean playChannel(int channelGroupIndex, int liveChannelIndex, boolean changeSource) {
         if ((channelGroupIndex == currentChannelGroupIndex && liveChannelIndex == currentLiveChannelIndex && !changeSource)
                 || (changeSource && currentLiveChannelItem.getSourceNum() == 1)) {
-            showChannelInfo();
-            return true;
+            //showChannelInfo();
+            //return true;
         }
         mVideoView.release();
         if (!changeSource) {
@@ -479,8 +479,9 @@ public class LivePlayActivity extends BaseActivity {
             currentLiveChangeSourceTimes++;
             if (currentLiveChannelItem.getSourceNum() == currentLiveChangeSourceTimes) {
                 currentLiveChangeSourceTimes = 0;
-                Integer[] groupChannelIndex = getNextChannel(Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false) ? -1 : 1);
-                playChannel(groupChannelIndex[0], groupChannelIndex[1], false);
+                playNextSource();
+                //Integer[] groupChannelIndex = getNextChannel(Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false) ? -1 : 1);
+                //playChannel(groupChannelIndex[0], groupChannelIndex[1], false);
             } else {
                 playNextSource();
             }
@@ -782,7 +783,6 @@ public class LivePlayActivity extends BaseActivity {
             finish();
             return;
         }
-
         if (list.size() == 1 && list.get(0).getGroupName().startsWith("http://127.0.0.1")) {
             showLoading();
             loadProxyLives(list.get(0).getGroupName());

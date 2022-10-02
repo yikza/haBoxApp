@@ -43,6 +43,36 @@ public class TipDialog extends BaseDialog {
         });
     }
 
+    public TipDialog(Context context, String tip) {
+        super(context);
+        setContentView(R.layout.dialog_tip);
+        setCanceledOnTouchOutside(false);
+        TextView tipInfo = findViewById(R.id.tipInfo);
+        TextView leftBtn = findViewById(R.id.leftBtn);
+        TextView rightBtn = findViewById(R.id.rightBtn);
+        tipInfo.setText(tip);
+        leftBtn.setText("");
+        rightBtn.setText("");
+        leftBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        rightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        setOnCancelListener(new OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+
+            }
+        });
+    }
+
     public interface OnListener {
         void left();
 

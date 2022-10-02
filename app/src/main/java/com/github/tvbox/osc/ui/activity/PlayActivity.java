@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +73,7 @@ import org.xwalk.core.XWalkWebResourceRequest;
 import org.xwalk.core.XWalkWebResourceResponse;
 
 import java.io.ByteArrayInputStream;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -299,7 +299,8 @@ public class PlayActivity extends BaseActivity {
                             }
                         }
                         if (parse || jx) {
-                            boolean userJxList = (playUrl.isEmpty() && ApiConfig.get().getVipParseFlags().contains(flag)) || jx;
+                            int direct = info.optInt("direct", 0);
+                            boolean userJxList = (direct == 0 && playUrl.isEmpty() && ApiConfig.get().getVipParseFlags().contains(flag)) || jx;
                             initParse(flag, userJxList, playUrl, url);
                         } else {
                             mController.showParse(false);
@@ -812,15 +813,18 @@ public class PlayActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Map<String, String> additionalHttpHeaders = new HashMap<>();
+                additionalHttpHeaders.put("Referer", url);
                 if (mXwalkWebView != null) {
                     mXwalkWebView.stopLoading();
                     mXwalkWebView.clearCache(true);
-                    mXwalkWebView.loadUrl(url);
+                    mXwalkWebView.loadUrl(url, additionalHttpHeaders);
                 }
                 if (mSysWebView != null) {
                     mSysWebView.stopLoading();
                     mSysWebView.clearCache(true);
-                    mSysWebView.loadUrl(url);
+
+                    mSysWebView.loadUrl(url, additionalHttpHeaders);
                 }
             }
         });

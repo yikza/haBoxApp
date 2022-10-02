@@ -74,9 +74,6 @@ public class SourceViewModel extends ViewModel {
 
     public void getSort(String sourceKey) {
         if (sourceKey == null) {
-            //AbsSortXml absSortXml = new AbsSortXml();
-            //absSortXml.message = "sourceKey null";
-            //sortResult.postValue(absSortXml);
             sortResult.postValue(null);
             return;
         }
@@ -100,36 +97,28 @@ public class SourceViewModel extends ViewModel {
                     } catch (TimeoutException e) {
                         e.printStackTrace();
                         future.cancel(true);
-                        //sortJson = "xxx"+e.getMessage();
-                    } catch (InterruptedException | ExecutionException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
-                        //sortJson = "xxx"+e.getMessage();
                     } finally {
                         if (sortJson != null) {
-                            //if (sortJson == "" || sortJson.startsWith("xxx")) {
-                            //    AbsSortXml sortXml = new AbsSortXml();
-                            //    sortXml.message = sortJson;
-                            //    sortResult.postValue(sortXml);
-                            //} else {
-                                AbsSortXml sortXml = sortJson(sortResult, sortJson);
-                                if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
-                                    AbsXml absXml = json(null, sortJson, sourceBean.getKey());
-                                    if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
-                                        sortXml.videoList = absXml.movie.videoList;
-                                        sortResult.postValue(sortXml);
-                                    } else {
-                                        getHomeRecList(sourceBean, null, new HomeRecCallback() {
-                                            @Override
-                                            public void done(List<Movie.Video> videos) {
-                                                sortXml.videoList = videos;
-                                                sortResult.postValue(sortXml);
-                                            }
-                                        });
-                                    }
-                                } else {
+                            AbsSortXml sortXml = sortJson(sortResult, sortJson);
+                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
+                                AbsXml absXml = json(null, sortJson, sourceBean.getKey());
+                                if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
+                                    sortXml.videoList = absXml.movie.videoList;
                                     sortResult.postValue(sortXml);
+                                } else {
+                                    getHomeRecList(sourceBean, null, new HomeRecCallback() {
+                                        @Override
+                                        public void done(List<Movie.Video> videos) {
+                                            sortXml.videoList = videos;
+                                            sortResult.postValue(sortXml);
+                                        }
+                                    });
                                 }
-                            //}
+                            } else {
+                                sortResult.postValue(sortXml);
+                            }
                         } else {
                             sortResult.postValue(null);
                         }
@@ -190,9 +179,6 @@ public class SourceViewModel extends ViewModel {
                         }
                     });
         } else {
-            //AbsSortXml absSortXml = new AbsSortXml();
-            //absSortXml.message = "sourceKey null";
-            //sortResult.postValue(absSortXml);
             sortResult.postValue(null);
         }
     }
