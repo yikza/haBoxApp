@@ -1,9 +1,12 @@
 package com.github.tvbox.osc.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
@@ -51,6 +56,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * @author pj567
@@ -170,6 +178,22 @@ public class SearchActivity extends BaseActivity {
                 etSearch.setText("");
             }
         });
+
+        etSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == KeyEvent.KEYCODE_ENTER) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (inputMethodManager.isActive()) {
+                        inputMethodManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                        tvSearch.callOnClick();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
         keyboard.setOnSearchKeyListener(new SearchKeyboard.OnSearchKeyListener() {
             @Override
             public void onSearchKey(int pos, String key) {
@@ -206,23 +230,32 @@ public class SearchActivity extends BaseActivity {
      * 拼音联想
      */
     private void loadRec(String key) {
-        OkGo.<String>get("https://s.video.qq.com/smartbox")
-                .params("plat", 2)
-                .params("ver", 0)
-                .params("num", 10)
-                .params("otype", "json")
-                .params("query", key)
+        JsonObject jsonParam = new JsonObject();
+        jsonParam.addProperty("appID", "3172");
+        jsonParam.addProperty("appKey", "lGhFIPeD3HsO9xEp");
+        jsonParam.addProperty("pageNum", 0);
+        jsonParam.addProperty("pageSize", 10);
+        jsonParam.addProperty("query", key);
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        OkGo.<String>post("https://pbaccess.video.qq.com/trpc.videosearch.smartboxServer.HttpRountRecall/Smartbox")
+                .headers("referer", "https://v.qq.com/")
+                .upRequestBody(RequestBody.create(JSON, jsonParam.toString()))
                 .execute(new AbsCallback<String>() {
                     @Override
                     public void onSuccess(Response<String> response) {
                         try {
                             ArrayList<String> hots = new ArrayList<>();
-                            String result = response.body();
-                            JsonObject json = JsonParser.parseString(result.substring(result.indexOf("{"), result.lastIndexOf("}") + 1)).getAsJsonObject();
-                            JsonArray itemList = json.get("item").getAsJsonArray();
+                            //JsonObject json = JsonParser.parseString(result.substring(result.indexOf("{"), result.lastIndexOf("}") + 1)).getAsJsonObject();
+                            JsonArray itemList = JsonParser.parseString(response.body())
+                                    .getAsJsonObject().get("data").getAsJsonObject()
+                                    .get("smartboxItemList").getAsJsonArray();
                             for (JsonElement ele : itemList) {
                                 JsonObject obj = (JsonObject) ele;
-                                hots.add(obj.get("word").getAsString().trim());
+                                JsonObject basicDoc = obj.getAsJsonObject("basicDoc");
+                                String title = basicDoc.get("title").getAsString().trim()
+                                        .replace("<em>", "")
+                                        .replace("</em>", "");
+                                hots.add(title);
                             }
                             wordAdapter.setNewData(hots);
                         } catch (Throwable th) {
@@ -245,19 +278,28 @@ public class SearchActivity extends BaseActivity {
             showLoading();
             search(title);
         }
+        JsonObject jsonParam = new JsonObject();
+        jsonParam.addProperty("pageNum", 0);
+        jsonParam.addProperty("pageSize", 10);
         // 加载热词
-        OkGo.<String>get("https://node.video.qq.com/x/api/hot_mobilesearch")
-                .params("channdlId", "0")
-                .params("_", System.currentTimeMillis())
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        OkGo.<String>post("https://pbaccess.video.qq.com/trpc.videosearch.hot_rank.HotRankServantHttp/HotRankHttp")
+                .headers("referer", "https://v.qq.com/")
+                .upRequestBody(RequestBody.create(JSON, jsonParam.toString()))
                 .execute(new AbsCallback<String>() {
                     @Override
                     public void onSuccess(Response<String> response) {
                         try {
                             ArrayList<String> hots = new ArrayList<>();
-                            JsonArray itemList = JsonParser.parseString(response.body()).getAsJsonObject().get("data").getAsJsonObject().get("itemList").getAsJsonArray();
+                            //JsonArray itemList = JsonParser.parseString(response.body()).getAsJsonObject().get("data").getAsJsonObject().get("itemList").getAsJsonArray();
+                            JsonArray itemList = JsonParser.parseString(response.body())
+                                    .getAsJsonObject().get("data").getAsJsonObject()
+                                    .get("navItemList").getAsJsonArray().get(0)
+                                    .getAsJsonObject().get("hotRankResult")
+                                    .getAsJsonObject().get("rankItemList").getAsJsonArray();
                             for (JsonElement ele : itemList) {
                                 JsonObject obj = (JsonObject) ele;
-                                hots.add(obj.get("title").getAsString().trim().replaceAll("<|>|《|》|-", "").split(" ")[0]);
+                                hots.add(obj.get("title").getAsString().trim());
                             }
                             wordAdapter.setNewData(hots);
                         } catch (Throwable th) {

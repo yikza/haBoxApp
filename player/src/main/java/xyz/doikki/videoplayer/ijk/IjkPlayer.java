@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -14,7 +13,6 @@ import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
-import tv.danmaku.ijk.media.player.MediaInfo;
 import tv.danmaku.ijk.media.player.misc.ITrackInfo;
 import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 import xyz.doikki.videoplayer.player.AbstractPlayer;
@@ -48,8 +46,11 @@ public class IjkPlayer extends AbstractPlayer implements IMediaPlayer.OnErrorLis
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setOnVideoSizeChangedListener(this);
         mMediaPlayer.setOnNativeInvokeListener(this);
+
         mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);
         mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_timeout", -1);
+
+        /*
         mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_transport", "tcp");
 
         mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
@@ -81,9 +82,10 @@ public class IjkPlayer extends AbstractPlayer implements IMediaPlayer.OnErrorLis
         // 播放前的探测Size，默认是1M, 改小一点会出画面更快
         mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "probesize", 1024*512L);
         // 播放重连次数
-        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "reconnect", 5);
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "reconnect", 3);
         // 每处理一个packet之后刷新io上下文
         mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "flush_packets", 1L);
+        */
     }
 
 
