@@ -54,6 +54,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -318,6 +319,12 @@ public class LivePlayActivity extends BaseActivity {
             Hawk.put(HawkConfig.LIVE_CHANNEL, currentLiveChannelItem.getChannelName());
             livePlayerManager.getLiveChannelPlayer(mVideoView, currentLiveChannelItem.getChannelName());
         }
+        try {
+            URL url = new URL(currentLiveChannelItem.getUrl());
+            if (url.getPath().endsWith(".m3u8")) {
+                livePlayerManager.forceSetPlayerType(mVideoView, 1);
+            }
+        } catch (Exception ignored) {}
         mVideoView.setUrl(currentLiveChannelItem.getUrl());
         showChannelInfo();
         mVideoView.start();
@@ -447,12 +454,12 @@ public class LivePlayActivity extends BaseActivity {
                     case VideoView.STATE_ERROR:
                     case VideoView.STATE_PLAYBACK_COMPLETED:
                         mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
-                        mHandler.post(mConnectTimeoutChangeSourceRun);
+                        mHandler.postDelayed(mConnectTimeoutChangeSourceRun, 3000);
                         break;
                     case VideoView.STATE_PREPARING:
                     case VideoView.STATE_BUFFERING:
                         mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
-                        mHandler.postDelayed(mConnectTimeoutChangeSourceRun, (Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 1) + 1) * 5000);
+                        mHandler.postDelayed(mConnectTimeoutChangeSourceRun, 4 * 5000);
                         break;
                 }
             }
@@ -485,6 +492,8 @@ public class LivePlayActivity extends BaseActivity {
             } else {
                 playNextSource();
             }
+            //if (!isCurrentLiveChannelValid()) return;
+            //playChannel(currentChannelGroupIndex, currentLiveChannelIndex, false);
         }
     };
 

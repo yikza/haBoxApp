@@ -86,10 +86,14 @@ public class ApiConfig {
             callback.error("-1");
             return;
         }
-        String md5 = Uri.parse(apiUrl).getQueryParameter("md5");
+        int md5Len = 5;
+        String md5Str = Uri.parse(apiUrl).getQueryParameter("md5");
+        if (md5Str != null && md5Str.length() > 0) {
+            md5Len = Math.min(md5Str.length(), 32);
+        }
         File cache = new File(App.getInstance().getFilesDir().getAbsolutePath() + "/config.dat");
         //Log.i("loadConfig", "md5:"+md5+",cache md5:"+MD5.getFileMd5(cache));
-        if (cache.exists() && MD5.getFileMd5(cache).equalsIgnoreCase(md5)) {
+        if (cache.exists() && MD5.getFileMd5(cache).substring(0, md5Len).equalsIgnoreCase(md5Str)) {
             try {
                 parseJson(apiUrl, cache);
                 callback.success();
@@ -219,7 +223,7 @@ public class ApiConfig {
         StringBuilder sb = new StringBuilder();
         String s = "";
         while ((s = bReader.readLine()) != null) {
-            sb.append(s + "\n");
+            sb.append(s).append("\n");
         }
         bReader.close();
         parseJson(apiUrl, sb.toString());
@@ -378,7 +382,7 @@ public class ApiConfig {
                     if (splitText.length > 1)
                         sourceNames.add(splitText[1]);
                     else
-                        sourceNames.add("源" + Integer.toString(sourceIndex));
+                        sourceNames.add("源" + sourceIndex);
                     sourceIndex++;
                 }
                 liveChannelItem.setChannelSourceNames(sourceNames);

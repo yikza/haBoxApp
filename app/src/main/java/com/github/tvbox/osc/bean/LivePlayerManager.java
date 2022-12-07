@@ -41,6 +41,14 @@ public class LivePlayerManager {
         }
     }
 
+    public void forceSetPlayerType(VideoView videoView, int playerType) {
+        JSONObject playerConfig = currentPlayerConfig;
+        try {
+            playerConfig.put("pl", playerType);
+        } catch (Exception ignore) {}
+        PlayerHelper.updateCfg(videoView, playerConfig);
+    }
+
     public void getLiveChannelPlayer(VideoView videoView, String channelName) {
         JSONObject playerConfig = Hawk.get(channelName, null);
         if (playerConfig == null) {

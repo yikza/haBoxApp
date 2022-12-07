@@ -52,7 +52,7 @@ public class OkGoHelper {
         } catch (Throwable th) {
             th.printStackTrace();
         }
-        builder.dns(dnsOverHttps);
+        //builder.dns(dnsOverHttps);
 
         ExoMediaSourceHelper.getInstance(App.getInstance()).setOkClient(builder.build());
     }
@@ -125,7 +125,7 @@ public class OkGoHelper {
         builder.writeTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
         builder.connectTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
 
-        builder.dns(dnsOverHttps);
+        //builder.dns(dnsOverHttps);
         try {
             setOkHttpSsl(builder);
         } catch (Throwable th) {
