@@ -319,12 +319,12 @@ public class LivePlayActivity extends BaseActivity {
             Hawk.put(HawkConfig.LIVE_CHANNEL, currentLiveChannelItem.getChannelName());
             livePlayerManager.getLiveChannelPlayer(mVideoView, currentLiveChannelItem.getChannelName());
         }
-        try {
-            URL url = new URL(currentLiveChannelItem.getUrl());
-            if (url.getPath().endsWith(".m3u8")) {
-                livePlayerManager.forceSetPlayerType(mVideoView, 1);
-            }
-        } catch (Exception ignored) {}
+//        try {
+//            URL url = new URL(currentLiveChannelItem.getUrl());
+//            if (url.getPath().endsWith(".m3u8")) {
+//                livePlayerManager.forceSetPlayerType(mVideoView, 1);
+//            }
+//        } catch (Exception ignored) {}
         mVideoView.setUrl(currentLiveChannelItem.getUrl());
         showChannelInfo();
         mVideoView.start();
