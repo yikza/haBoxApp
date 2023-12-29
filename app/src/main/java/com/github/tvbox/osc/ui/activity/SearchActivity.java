@@ -3,7 +3,9 @@ package com.github.tvbox.osc.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -194,6 +196,26 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String text = etSearch.getText().toString().trim();
+                if (text.length() > 0) {
+                    loadRec(text);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         keyboard.setOnSearchKeyListener(new SearchKeyboard.OnSearchKeyListener() {
             @Override
             public void onSearchKey(int pos, String key) {
@@ -201,17 +223,11 @@ public class SearchActivity extends BaseActivity {
                     String text = etSearch.getText().toString().trim();
                     text += key;
                     etSearch.setText(text);
-                    if (text.length() > 0) {
-                        loadRec(text);
-                    }
                 } else if (pos == 1) {
                     String text = etSearch.getText().toString().trim();
                     if (text.length() > 0) {
                         text = text.substring(0, text.length() - 1);
                         etSearch.setText(text);
-                    }
-                    if (text.length() > 0) {
-                        loadRec(text);
                     }
                 } else if (pos == 0) {
                     RemoteDialog remoteDialog = new RemoteDialog(mContext);
