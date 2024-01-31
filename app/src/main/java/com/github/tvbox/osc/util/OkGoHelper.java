@@ -1,6 +1,9 @@
 package com.github.tvbox.osc.util;
 
+import android.graphics.Bitmap;
+
 import com.github.tvbox.osc.base.App;
+import com.github.tvbox.osc.picasso.OkHttpDownLoader;
 import com.github.tvbox.osc.util.SSL.SSLSocketFactoryCompat;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.https.HttpsUtils;
@@ -52,7 +55,7 @@ public class OkGoHelper {
         } catch (Throwable th) {
             th.printStackTrace();
         }
-        //builder.dns(dnsOverHttps);
+        builder.dns(dnsOverHttps);
 
         ExoMediaSourceHelper.getInstance(App.getInstance()).setOkClient(builder.build());
     }
@@ -117,7 +120,7 @@ public class OkGoHelper {
             loggingInterceptor.setColorLevel(Level.OFF);
         }
 
-        //builder.retryOnConnectionFailure(false);
+        builder.retryOnConnectionFailure(false);
 
         builder.addInterceptor(loggingInterceptor);
 
@@ -125,7 +128,7 @@ public class OkGoHelper {
         builder.writeTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
         builder.connectTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
 
-        //builder.dns(dnsOverHttps);
+        builder.dns(dnsOverHttps);
         try {
             setOkHttpSsl(builder);
         } catch (Throwable th) {
@@ -142,8 +145,8 @@ public class OkGoHelper {
     }
 
     static void initPicasso(OkHttpClient client) {
-        OkHttp3Downloader downloader = new OkHttp3Downloader(client);
-        Picasso picasso = new Picasso.Builder(App.getInstance()).downloader(downloader).build();
+        OkHttpDownLoader downloader = new OkHttpDownLoader(client);
+        Picasso picasso = new Picasso.Builder(App.getInstance()).downloader(downloader).defaultBitmapConfig(Bitmap.Config.RGB_565).build();
         Picasso.setSingletonInstance(picasso);
     }
 

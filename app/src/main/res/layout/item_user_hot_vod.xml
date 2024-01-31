@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_user_focus"
@@ -10,12 +11,19 @@
         android:layout_width="@dimen/vs_214"
         android:layout_height="@dimen/vs_280">
 
-        <ImageView
-            android:id="@+id/ivThumb"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/vs_1"
-            android:scaleType="fitXY" />
+            android:backgroundTint="@android:color/transparent"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="7dp">
+            <ImageView
+                android:id="@+id/ivThumb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/vs_1"
+                android:scaleType="fitXY" />
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -21,11 +21,19 @@
             android:paddingRight="@dimen/vs_50"
             android:paddingBottom="@dimen/vs_10">
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/vs_240"
+                android:layout_height="@dimen/vs_320"
+                android:backgroundTint="@android:color/transparent"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="7dp">
             <ImageView
                 android:id="@+id/ivThumb"
                 android:layout_width="@dimen/vs_240"
                 android:layout_height="@dimen/vs_320"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@drawable/img_loading_placeholder"/>
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -135,11 +143,13 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:lineSpacingMultiplier="1.2"
-                    android:maxLines="4"
+                    android:maxLines="3"
+                    android:letterSpacing=".06"
                     android:textColor="@color/color_CCFFFFFF"
-                    android:textSize="@dimen/ts_20" />
+                    android:textSize="@dimen/ts_20"
+                    android:text="果你对json 解析原理 "/>
 
-                <Space
+                <View
                     android:layout_width="wrap_content"
                     android:layout_height="0mm"
                     android:layout_weight="1" />

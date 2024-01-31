@@ -32,13 +32,14 @@ public class PlayerHelper {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        IJKCode codec = ApiConfig.get().getIJKCodec(ijkCode);
+        //IJKCode codec = ApiConfig.get().getIJKCodec(ijkCode);
         PlayerFactory playerFactory;
         if (playerType == 0) {
+            String finalIjkCode = ijkCode;
             playerFactory = new PlayerFactory<IjkMediaPlayer>() {
                 @Override
                 public IjkMediaPlayer createPlayer(Context context) {
-                    return new IjkMediaPlayer(context, codec);
+                    return new IjkMediaPlayer(context, finalIjkCode);
                 }
             };
             try {
@@ -74,12 +75,13 @@ public class PlayerHelper {
 
     public static void updateCfg(VideoView videoView) {
         int playType = Hawk.get(HawkConfig.PLAY_TYPE, 0);
+        String ijkCode = Hawk.get(HawkConfig.IJK_CODEC, "软解码");
         PlayerFactory playerFactory;
         if (playType == 0) {
             playerFactory = new PlayerFactory<IjkMediaPlayer>() {
                 @Override
                 public IjkMediaPlayer createPlayer(Context context) {
-                    return new IjkMediaPlayer(context, null);
+                    return new IjkMediaPlayer(context, ijkCode);
                 }
             };
             try {

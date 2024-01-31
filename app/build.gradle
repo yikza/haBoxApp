@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
 
     defaultConfig {
         applicationId 'com.github.tvbox.osc'
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 29
         versionCode 1
         versionName '1.0.0'
         multiDexEnabled true
@@ -24,20 +24,14 @@ android {
 
     buildTypes {
         debug {
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled false
-
-            ndk {
-                abiFilters 'armeabi-v7a', 'arm64-v8a'
-            }
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            ndk {abiFilters 'armeabi-v7a', 'arm64-v8a'}
         }
         release {
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled true
-
-            ndk {
-                abiFilters 'armeabi-v7a', 'arm64-v8a'
-            }
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            ndk {abiFilters 'armeabi-v7a', 'arm64-v8a'}
         }
     }
 
@@ -55,13 +49,13 @@ android {
 dependencies {
     api fileTree(dir: "libs", include: ["*.jar"])
 
-
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
     implementation 'com.google.zxing:core:3.4.1'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
     implementation files('libs/thunder.jar')
 
     annotationProcessor 'androidx.room:room-compiler:2.4.3'

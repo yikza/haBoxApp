@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.github.catvod.crawler.JarLoader;
 import com.github.catvod.crawler.Spider;
 import com.github.tvbox.osc.base.App;
@@ -319,34 +320,34 @@ public class ApiConfig {
             AdBlocker.addAdHost(host.getAsString());
         }
         // IJK解码配置
-        boolean foundOldSelect = false;
-        String ijkCodec = Hawk.get(HawkConfig.IJK_CODEC, "");
-        ijkCodes = new ArrayList<>();
-        for (JsonElement opt : infoJson.get("ijk").getAsJsonArray()) {
-            JsonObject obj = (JsonObject) opt;
-            String name = obj.get("group").getAsString();
-            LinkedHashMap<String, String> baseOpt = new LinkedHashMap<>();
-            for (JsonElement cfg : obj.get("options").getAsJsonArray()) {
-                JsonObject cObj = (JsonObject) cfg;
-                String key = cObj.get("category").getAsString() + "|" + cObj.get("name").getAsString();
-                String val = cObj.get("value").getAsString();
-                baseOpt.put(key, val);
-            }
-            IJKCode codec = new IJKCode();
-            codec.setName(name);
-            codec.setOption(baseOpt);
-            if (name.equals(ijkCodec) || TextUtils.isEmpty(ijkCodec)) {
-                codec.selected(true);
-                ijkCodec = name;
-                foundOldSelect = true;
-            } else {
-                codec.selected(false);
-            }
-            ijkCodes.add(codec);
-        }
-        if (!foundOldSelect && ijkCodes.size() > 0) {
-            ijkCodes.get(0).selected(true);
-        }
+//        boolean foundOldSelect = false;
+//        String ijkCodec = Hawk.get(HawkConfig.IJK_CODEC, "");
+//        ijkCodes = new ArrayList<>();
+//        for (JsonElement opt : infoJson.get("ijk").getAsJsonArray()) {
+//            JsonObject obj = (JsonObject) opt;
+//            String name = obj.get("group").getAsString();
+//            LinkedHashMap<String, String> baseOpt = new LinkedHashMap<>();
+//            for (JsonElement cfg : obj.get("options").getAsJsonArray()) {
+//                JsonObject cObj = (JsonObject) cfg;
+//                String key = cObj.get("category").getAsString() + "|" + cObj.get("name").getAsString();
+//                String val = cObj.get("value").getAsString();
+//                baseOpt.put(key, val);
+//            }
+//            IJKCode codec = new IJKCode();
+//            codec.setName(name);
+//            codec.setOption(baseOpt);
+//            if (name.equals(ijkCodec) || TextUtils.isEmpty(ijkCodec)) {
+//                codec.selected(true);
+//                ijkCodec = name;
+//                foundOldSelect = true;
+//            } else {
+//                codec.selected(false);
+//            }
+//            ijkCodes.add(codec);
+//        }
+//        if (!foundOldSelect && ijkCodes.size() > 0) {
+//            ijkCodes.get(0).selected(true);
+//        }
     }
 
     public void loadLives(JsonArray livesArray) {
@@ -471,21 +472,29 @@ public class ApiConfig {
     }
 
     public List<IJKCode> getIjkCodes() {
+        List<IJKCode> ijkCodes = new ArrayList<>();
+        IJKCode hardCodec = new IJKCode();
+        IJKCode softCodec = new IJKCode();
+        hardCodec.setName("硬解码");
+        softCodec.setName("软解码");
+        ijkCodes.add(hardCodec);
+        ijkCodes.add(softCodec);
         return ijkCodes;
+        //return ijkCodes==null?offlineGetIjkCodes():ijkCodes;
     }
 
-    public IJKCode getCurrentIJKCode() {
-        String codeName = Hawk.get(HawkConfig.IJK_CODEC, "");
-        return getIJKCodec(codeName);
-    }
+//    public IJKCode getCurrentIJKCode() {
+//        String codeName = Hawk.get(HawkConfig.IJK_CODEC, "");
+//        return getIJKCodec(codeName);
+//    }
 
-    public IJKCode getIJKCodec(String name) {
-        for (IJKCode code : ijkCodes) {
-            if (code.getName().equals(name))
-                return code;
-        }
-        return ijkCodes.get(0);
-    }
+//    public IJKCode getIJKCodec(String name) {
+//        for (IJKCode code : getIjkCodes()) {
+//            if (code.getName().equals(name))
+//                return code;
+//        }
+//        return ijkCodes.get(0);
+//    }
 
     String clanToAddress(String lanLink) {
         if (lanLink.startsWith("clan://localhost/")) {
