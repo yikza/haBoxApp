@@ -82,11 +82,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import me.jessyan.autosize.AutoSize;
+import xyz.doikki.videoplayer.player.AbstractPlayer;
 import xyz.doikki.videoplayer.player.ProgressManager;
 import xyz.doikki.videoplayer.player.VideoView;
 
 public class PlayActivity extends BaseActivity {
-    private VideoView mVideoView;
+    private VideoView<AbstractPlayer> mVideoView;
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
     private ProgressBar mPlayLoading;

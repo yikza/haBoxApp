@@ -5,6 +5,8 @@ import android.content.res.AssetFileDescriptor;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -53,7 +55,6 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
 
     @Override
     public void initPlayer() {
-
         mInternalPlayer = new ExoPlayer.Builder(
                 mAppContext,
                 mRenderersFactory == null ? mRenderersFactory = new DefaultRenderersFactory(mAppContext) : mRenderersFactory,
@@ -102,6 +103,7 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
         if (mInternalPlayer == null)
             return;
         mInternalPlayer.stop();
+        mInternalPlayer.clearMediaItems();
     }
 
     @Override
@@ -263,7 +265,7 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
     }
 
     @Override
-    public void onVideoSizeChanged(VideoSize videoSize) {
+    public void onVideoSizeChanged(@NonNull VideoSize videoSize) {
         if (mPlayerEventListener != null) {
             mPlayerEventListener.onVideoSizeChanged(videoSize.width, videoSize.height);
             if (videoSize.unappliedRotationDegrees > 0) {
@@ -273,7 +275,11 @@ public class ExoMediaPlayer extends AbstractPlayer implements Player.Listener {
     }
 
     @Override
-    public void onPlayerError(PlaybackException error) {
+    public void onPlayerError(@NonNull PlaybackException error) {
+        if (mInternalPlayer != null) {
+            mInternalPlayer.clearMediaItems();
+        }
+        mMediaSourceHelper.reset();
         mPlayerEventListener.onError();
     }
 }

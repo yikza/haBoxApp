@@ -216,16 +216,10 @@ public class VodController extends BaseController {
                 boolean playerVail = false;
                 do {
                     playerType++;
-                    if (playerType <= 2) {
-                        playerVail = true;
-                    } else if (playerType == 10) {
-                        playerVail = mxPlayerExist;
-                    } else if (playerType == 11) {
-                        playerVail = reexPlayerExist;
-                    } else if (playerType > 11) {
+                    if (playerType >= 2) {//ijk or exo
                         playerType = 0;
-                        playerVail = true;
                     }
+                    playerVail = true;
                 } while (!playerVail);
                 mPlayerConfig.put("pl", playerType);
                 updatePlayerCfgView();
@@ -326,8 +320,8 @@ public class VodController extends BaseController {
     public void setPlayerConfig(JSONObject playerCfg) {
         this.mPlayerConfig = playerCfg;
         updatePlayerCfgView();
-        mxPlayerExist = MXPlayer.getPackageInfo() != null;
-        reexPlayerExist = ReexPlayer.getPackageInfo() != null;
+        //mxPlayerExist = MXPlayer.getPackageInfo() != null;
+        //reexPlayerExist = ReexPlayer.getPackageInfo() != null;
     }
 
     void updatePlayerCfgView() {
