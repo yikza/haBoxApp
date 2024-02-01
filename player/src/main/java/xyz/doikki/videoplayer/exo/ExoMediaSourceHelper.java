@@ -9,6 +9,11 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSource;
 import com.google.android.exoplayer2.ext.rtmp.RtmpDataSource;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory;
+import com.google.android.exoplayer2.extractor.ts.TsExtractor;
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
@@ -23,6 +28,7 @@ import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
@@ -40,6 +46,7 @@ public final class ExoMediaSourceHelper {
     private final String mUserAgent;
     private final Context mAppContext;
     private OkHttpDataSource.Factory mHttpDataSourceFactory;
+    private ExtractorsFactory extractorsFactory;
     private OkHttpClient mOkClient = null;
     private Cache mCache;
 
@@ -97,11 +104,23 @@ public final class ExoMediaSourceHelper {
             case C.CONTENT_TYPE_DASH:
                 return new DashMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(contentUri));
             case C.CONTENT_TYPE_HLS:
-                return new HlsMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(contentUri));
+                //return new HlsMediaSource.Factory(factory).createMediaSource(getMediaItem(contentUri, MimeTypes.APPLICATION_M3U8));
             default:
             case C.CONTENT_TYPE_OTHER:
-                return new ProgressiveMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(contentUri));
+                //return new ProgressiveMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(contentUri));
+                return new DefaultMediaSourceFactory(factory, getExtractorsFactory(3)).createMediaSource(getMediaItem(contentUri, MimeTypes.APPLICATION_M3U8));
         }
+    }
+
+    private MediaItem getMediaItem(Uri uri, String mimeType) {
+        MediaItem.Builder builder = new MediaItem.Builder().setUri(uri);
+        if (mimeType != null) builder.setMimeType(mimeType);
+        return builder.build();
+    }
+
+    private ExtractorsFactory getExtractorsFactory(int searchBytesFactor) {
+        if (extractorsFactory == null) extractorsFactory = new DefaultExtractorsFactory().setTsExtractorFlags(DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS).setTsExtractorTimestampSearchBytes(TsExtractor.DEFAULT_TIMESTAMP_SEARCH_BYTES * searchBytesFactor);
+        return extractorsFactory;
     }
 
     private int inferContentType(String fileName) {

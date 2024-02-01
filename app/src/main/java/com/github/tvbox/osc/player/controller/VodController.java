@@ -296,6 +296,17 @@ public class VodController extends BaseController {
             Hawk.put(HawkConfig.PLAY_TIME_STEP, step);
             updatePlayerCfgView();
         });
+        mPlayerTimeStepBtn.setOnLongClickListener(v -> {
+            try {
+                mPlayerConfig.put("et", 0);
+                mPlayerConfig.put("st", 0);
+                updatePlayerCfgView();
+                listener.updatePlayerCfg();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return true;
+        });
     }
 
     @Override

@@ -53,7 +53,7 @@ public final class OkHttpDownLoader implements Downloader {
     }
 
     @NonNull @Override public Response load(@NonNull Request request) throws IOException {
-        Request.Builder builder = request.newBuilder().addHeader("Referer", request.url().host());
+        Request.Builder builder = request.newBuilder().addHeader("Referer", request.url().host()).addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) like Gecko Chrome/120.0.1.1");
         return client.newCall(builder.build()).execute();
     }
 
