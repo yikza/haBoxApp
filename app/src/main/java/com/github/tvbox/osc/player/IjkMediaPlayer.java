@@ -47,10 +47,10 @@ public class IjkMediaPlayer extends IjkPlayer {
 //            }
 //        }
         if (Objects.equals(codec, "硬解码")) {
-            mMediaPlayer.setOption(1, "mediacodec", 1);
-            mMediaPlayer.setOption(1, "mediacodec-all-videos", 1);
-            mMediaPlayer.setOption(1, "mediacodec-auto-rotate", 1);
-            mMediaPlayer.setOption(1, "mediacodec-handle-resolution-change", 1);
+            mMediaPlayer.setOption(4, "mediacodec", 1);
+            mMediaPlayer.setOption(4, "mediacodec-all-videos", 1);
+            mMediaPlayer.setOption(4, "mediacodec-auto-rotate", 1);
+            mMediaPlayer.setOption(4, "mediacodec-handle-resolution-change", 1);
         }
     }
 
@@ -58,7 +58,7 @@ public class IjkMediaPlayer extends IjkPlayer {
     public void setDataSource(String path, Map<String, String> headers) {
         try {
             if (path.contains("rtsp") || path.contains("udp") || path.contains("rtp")) {
-                mMediaPlayer.setOption(1, "infbuf", 1);
+                mMediaPlayer.setOption(4, "infbuf", 1);
                 mMediaPlayer.setOption(1, "rtsp_transport", "tcp");
                 mMediaPlayer.setOption(1, "rtsp_flags", "prefer_tcp");
                 mMediaPlayer.setOption(1, "probesize", 512 * 1000);
