@@ -1,22 +1,5 @@
 央视,#genre#
-CCTV1,https://live.metshop.top/msp.php?id=cctv1
-CCTV2,https://live.metshop.top/msp.php?id=cctv2
-CCTV3,https://live.metshop.top/msp.php?id=cctv3
-CCTV4,https://live.metshop.top/msp.php?id=cctv4
-CCTV5,https://live.metshop.top/msp.php?id=cctv5
-CCTV5+,https://live.metshop.top/msp.php?id=cctv5p
-CCTV6,https://live.metshop.top/msp.php?id=cctv6
-CCTV7,https://live.metshop.top/msp.php?id=cctv7
-CCTV8,https://live.metshop.top/msp.php?id=cctv8
-CCTV9,https://live.metshop.top/msp.php?id=cctv9
-CCTV10,https://live.metshop.top/msp.php?id=cctv10
-CCTV11,https://live.metshop.top/msp.php?id=cctv11
-CCTV12,https://live.metshop.top/msp.php?id=cctv12
-CCTV13,https://live.metshop.top/msp.php?id=cctv13
-CCTV14,https://live.metshop.top/msp.php?id=cctv14
-CCTV15,https://live.metshop.top/msp.php?id=cctv15
-CCTV16,https://live.metshop.top/msp.php?id=cctv16
-CCTV17,https://live.metshop.top/msp.php?id=cctv17
+CCTV中文国际,https://www.youtube.com/watch?v=0K6C6Rv4RR4
 CCTV1,http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888888/224/3221225804/1.m3u8
 CCTV2,http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888888/224/3221226195/1.m3u8
 CCTV2,http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888888/224/3221226224/1.m3u8
@@ -38,21 +21,6 @@ CCTV13,http://39.134.24.166/dbiptv.sn.chinamobile.com/PLTV/88888888/224/32212262
 CCTV14,http://39.134.24.166/dbiptv.sn.chinamobile.com/PLTV/88888888/224/3221226193/1.m3u8
 CCTV15,http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888888/224/3221225785/1.m3u8
 CCTV16,http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888888/224/3221226921/1.m3u8
-CCTV2,http://1.195.111.251:11190/tsfile/live/0002_1.m3u8
-CCTV3,http://1.195.111.251:11190/tsfile/live/0003_1.m3u8
-CCTV4,http://1.195.111.251:11190/tsfile/live/0004_1.m3u8
-CCTV5,http://1.195.111.251:11190/tsfile/live/0005_1.m3u8
-CCTV6,http://1.195.111.251:11190/tsfile/live/0006_1.m3u8
-CCTV7,http://1.195.111.251:11190/tsfile/live/0007_1.m3u8
-CCTV8,http://1.195.111.251:11190/tsfile/live/0008_1.m3u8
-CCTV9,http://1.195.111.251:11190/tsfile/live/0009_1.m3u8
-CCTV10,http://1.195.111.251:11190/tsfile/live/0010_1.m3u8
-CCTV11,http://1.195.111.251:11190/tsfile/live/0011_1.m3u8
-CCTV12,http://1.195.111.251:11190/tsfile/live/0012_1.m3u8
-CCTV13,https://live-play.cctvnews.cctv.com/cctv/merge_cctv13.m3u8
-CCTV13,http://1.195.111.251:11190/tsfile/live/0013_1.m3u8
-CCTV14,http://1.195.111.251:11190/tsfile/live/0014_1.m3u8
-CCTV15,http://1.195.111.251:11190/tsfile/live/0015_1.m3u8
 CCTV13,https://live-play.cctvnews.cctv.com/cctv/merge_cctv13_mhd.m3u8
 CCTV1,http://221.213.43.82:8888/newlive/live/hls/2/live.m3u8
 CCTV2,http://221.213.43.82:8888/newlive/live/hls/3/live.m3u8
@@ -79,7 +47,6 @@ CCTV9,http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888890/224/322122619
 CCTV9,http://39.134.24.161/dbiptv.sn.chinamobile.com/PLTV/88888890/224/3221226197/index.m3u8?
 CCTV9,http://111.59.63.32:9901/tsfile/live/1016_1.m3u8
 CCTV10,http://221.213.43.82:8888/newlive/live/hls/12/live.m3u8
-CCTV10,http://1.195.111.251:11190/tsfile/live/0010_1.m3u8?%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E3%80%90%E6%99%B4%E5%9B%AD%E3%80%91%E6%95%B4%E7%90%86%E5%88%86%E4%BA%AB
 CCTV10,http://111.59.63.32:9901/tsfile/live/1017_1.m3u8
 CCTV10,http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888890/224/3221226189/index.m3u8?
 CCTV10,http://39.134.24.161/dbiptv.sn.chinamobile.com/PLTV/88888890/224/3221226189/index.m3u8?
@@ -102,7 +69,6 @@ CCTV15,http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888890/224/32212257
 CCTV15,http://39.134.24.161/dbiptv.sn.chinamobile.com/PLTV/88888890/224/3221225785/index.m3u8?
 CCTV16,http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888890/224/3221226921/index.m3u8?
 CCTV16,http://39.134.24.161/dbiptv.sn.chinamobile.com/PLTV/88888890/224/3221226921/index.m3u8?   
-
 
 卫视,#genre#
 北京卫视,https://live.metshop.top/msp.php?id=bjws
@@ -231,13 +197,24 @@ CCTV16,http://39.134.24.161/dbiptv.sn.chinamobile.com/PLTV/88888890/224/32212269
 内蒙古卫视,http://111.59.63.32:9901/tsfile/live/1038_1.m3u8
 
 🇨🇳｜港澳台,#genre#
+鳳凰衛視,https://www.youtube.com/watch?v=0K6C6Rv4RR4
 RTHK 32,https://rthktv32-live.akamaized.net/hls/live/2036819/RTHKTV32/stream5/streamPlaylist.m3u8
-有线新闻,http://61.10.2.141/live_freedirect/freehd209_h.live/playlist.m3u8
 民視新聞,http://tv.redrainl.site:9500/live.m3u8?c=01
 中視新聞,http://tv.redrainl.site:9500/live.m3u8?c=02
 中天新聞,http://tv.redrainl.site:9500/live.m3u8?c=03
 台視新聞,http://tv.redrainl.site:9500/live.m3u8?c=11
-寰宇新聞,http://tv.redrainl.site:9500/live.m3u8?c=22
+TVBS新聞,https://www.youtube.com/watch?v=m_dhMSvUCIc
+東森新聞,https://www.youtube.com/watch?v=2dfAzcDf8Zg
+寰宇新聞,https://www.youtube.com/watch?v=6IquAgfvYmc
+中天新聞,https://www.youtube.com/watch?v=oIgbl7t0S_w
+中視新聞,https://www.youtube.com/watch?v=TCnaIE_SAtM
+公視新聞,https://www.youtube.com/watch?v=quwqlazU-c8
+台視新聞,https://www.youtube.com/watch?v=xL0ch83RAK8
+華視新聞,https://www.youtube.com/watch?v=wM0g8EoUZ_E
+三立新聞,https://www.youtube.com/watch?v=oZdzzvxTfUY
+民視新聞,https://www.youtube.com/watch?v=ylYJSBUgaMA
+8视界,https://www.youtube.com/watch?v=RvSOIM620bA
+
 
 🐟｜斗鱼,#genre#
 华语经典,http://epg.112114.xyz/douyu/434971
