@@ -4,6 +4,7 @@
 {"key":"csp_Nyvod","name":"🗽纽约影院","type":3,"api":"csp_Nyvod","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Yifan","name":"🐧一帆影视","type":3,"api":"csp_Yifan","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Olevod","name":"🦩欧乐影视","type":3,"api":"csp_Olevod","searchable":1,"quickSearch":1,"filterable":1},
+{"key":"csp_Douyu","name":"🐟鬥魚","type":3,"api":"csp_Douyu","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Radio","name":"📢收音机","type":3,"api":"csp_Radio","searchable":1,"quickSearch":0,"filterable":1},
 {"key":"push_agent","name": "📱推送","type": 3,"api": "csp_PushAgent","searchable": 0,"quickSearch": 0,"filterable":0}
 ],
