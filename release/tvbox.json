@@ -5,8 +5,8 @@
 {"key":"csp_Yifan","name":"🚢一帆影视","type":3,"api":"csp_Yifan","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Olevod","name":"🐙欧乐影视","type":3,"api":"csp_Olevod","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Douyu","name":"🐠 鬥魚","type":3,"api":"csp_Douyu","searchable":1,"quickSearch":1,"filterable":1},
-{"key":"csp_BiliBili","name":"🐠 哔哩","type":3,"api":"csp_BiliBili","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://raw.githubusercontent.com/hikdo/tvbox/main/release/bilibili.json"},
-{"key":"csp_BiliBili_MV","name":"🐠 哔哩MV","type":3,"api":"csp_BiliBili","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://raw.githubusercontent.com/hikdo/tvbox/main/release/mv.json"},
+{"key":"csp_BiliBili","name":"🐠 哔哩","type":3,"api":"csp_BiliBili","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://raw.githubusercontent.com/hikdo/tvbox/main/release/data/bilibili.json"},
+{"key":"csp_BiliBili_MV","name":"🐠 哔哩MV","type":3,"api":"csp_BiliBili","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://raw.githubusercontent.com/hikdo/tvbox/main/release/data/mv.json"},
 {"key":"csp_Radio","name":"🔉收音机","type":3,"api":"csp_Radio","searchable":1,"quickSearch":0,"filterable":1},
 {"key":"push_agent","name":"📱推送","type": 3,"api": "csp_PushAgent","searchable": 0,"quickSearch": 0,"filterable":0}
 ],
