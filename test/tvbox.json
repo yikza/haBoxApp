@@ -5,6 +5,7 @@
     {"key":"csp_Yifan","name":"🚢一帆影视","type":3,"api":"csp_Yifan","searchable":1,"quickSearch":1,"filterable":1},
     {"key":"csp_Olevod","name":"🐙欧乐影视","type":3,"api":"csp_Olevod","searchable":1,"quickSearch":1,"filterable":1},
     {"key":"csp_Douyu","name":"🐠鬥魚","type":3,"api":"csp_Douyu","searchable":1,"quickSearch":1,"filterable":1},
+    {"key":"csp_Huya","name":"🐯虎牙","type":3,"api":"csp_Huya","searchable":1,"quickSearch":1,"filterable":1},
     {"key":"csp_BiliBili","name":"🐠哔哩","type":3,"api":"csp_BiliBili","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://raw.githubusercontent.com/hikdo/tvbox/main/test/data/bilibili.json"},
     {"key":"csp_Radio","name":"🔉收音机","type":3,"api":"csp_Radio","searchable":1,"quickSearch":0,"filterable":1},
     {"key":"push_agent","name":"📱推送","type": 3,"api": "csp_PushAgent","searchable": 0,"quickSearch": 0,"filterable":0}
@@ -18,7 +19,7 @@
     {"name": "xmflv","type": 0,"url": "https://jx.xmflv.com/?url=","ext": {"flag": ["qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩"]}},
     {"name": "剖云","type": 0,"url": "https://www.pouyun.com/?url=","ext": {"flag": ["qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩"]}}
   ],
-  "spider":"https://raw.githubusercontent.com/hikdo/tvbox/main/test/tvbox.jar;md5;e26d58a5f4f4e56a4808b715523b5c9f",
+  "spider":"https://raw.githubusercontent.com/hikdo/tvbox/main/test/tvbox.jar;md5;0c68dfb03e21c2419cfd41556f934d1b",
   "lives": [{"name":"test","url":"https://raw.githubusercontent.com/hikdo/tvbox/main/test/live.m3u"}],
   "flags":["youku","qq","QQ","iqiyi","qiyi","letv","sohu","tudou","pptv","PPTV","mgtv","ltnb","rx","SLYS4k","BYGA","BYGB","luanzi","dxzy","QEYSS","aliyun","AliS","122","chuangying","CL4K","xfyun","wuduzy","wasu","bilibili","renrenmi","xmm","xigua","m1905","funshion","优酷","芒果","腾讯","爱奇艺","奇艺","哔哩哔哩","哔哩","西瓜视频","腾讯视频","奇艺视频","优酷视频","芒果视频","乐视视频","FY","fy","FeiYun","feiyun","飞云"],
   "rules":[{"name":"海外看","hosts":["haiwaikan"],"regex":["8.16","9.99","10.0099","10.3333","16.0599","8.1748","12.33","10.85"]},{"name":"kuaikan","hosts":["kuaikan"],"regex":["10.032"]}],
