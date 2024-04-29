@@ -128,6 +128,8 @@ ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gec
 video://https://live.mgtv.com/?channelId=484
 #EXTINF:-1 tvg-name="朝日新聞" tvg-logo="https://news.tv-asahi.co.jp/img/common-img/tva_news-logo.png" group-title="🇯🇵日本",朝日新聞
 https://www.youtube.com/watch?v=coYw-eVU0Ks
+#EXTINF:-1 tvg-name="【LIVE】渋谷" tvg-logo="https://news.tv-asahi.co.jp/img/common-img/tva_news-logo.png" group-title="🇯🇵日本",【LIVE】渋谷
+https://www.youtube.com/watch?v=RTwNEfirmks
 #EXTINF:-1 tvg-name="台视新闻" tvg-logo="https://live.fanmingming.com/tv/台视新闻.png" group-title="▶YOUTUBE",台视新闻
 https://www.youtube.com/watch?v=xL0ch83RAK8
 #EXTINF:-1 tvg-name="民视新闻" tvg-logo="https://cdn.ftvnews.com.tw/client/images/favicons/favicon_120.png" group-title="▶YOUTUBE",民视新闻
