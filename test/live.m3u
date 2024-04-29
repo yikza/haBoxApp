@@ -126,7 +126,21 @@ video://https://live.mgtv.com/?channelId=346
 ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36
 #EXTINF:-1 tvg-name="湖南电视剧" tvg-logo="https://live.fanmingming.com/tv/湖南电视剧.png" group-title="🛰️卫视",湖南电视剧
 video://https://live.mgtv.com/?channelId=484
-#EXTINF:-1 tvg-name="朝日新聞" tvg-logo="https://news.tv-asahi.co.jp/img/common-img/tva_news-logo.png" group-title="▶YOUTUBE",朝日新聞
+#EXTINF:-1 tvg-name="TVB翡翠台" tvg-logo="https://www.tvb.com/tvb_logo.png" group-title="🇭🇰香港",TVB翡翠台
+video://https://www.xhzb.tw/tv-show-20052-1.html
+#EXTINF:-1 tvg-name="TVB明珠台" tvg-logo="https://www.tvb.com/tvb_logo.png" group-title="🇭🇰香港",TVB明珠台
+video://https://www.xhzb.tw/tv-show-20058-1.html
+#EXTINF:-1 tvg-name="无线新闻台" tvg-logo="https://news.tvb.com/images/logo.png" group-title="🇭🇰香港",无线新闻台
+video://https://www.xhzb.tw/tv-show-20053-1.html
+#EXTINF:-1 tvg-name="TVB星河台" tvg-logo="https://www.tvb.com/tvb_logo.png" group-title="🇭🇰香港",TVB星河台
+video://https://www.xhzb.tw/tv-show-20054-6.html
+#EXTINF:-1 tvg-name="凤凰香港台" tvg-logo="https://upload.wikimedia.org/wikipedia/zh/4/4d/Phoenix_hongkong.png" group-title="🇭🇰香港",凤凰香港台
+video://https://www.xhzb.tw/tv-show-20064-1.html
+#EXTINF:-1 tvg-name="NHK総合" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/NHK%E7%B7%8F%E5%90%88%E3%83%AD%E3%82%B42020-.svg/400px-NHK%E7%B7%8F%E5%90%88%E3%83%AD%E3%82%B42020-.svg.png" group-title="🇯🇵日本",NHK総合
+video://https://www.xhzb.tw/tv-show-20137-1.html
+#EXTINF:-1 tvg-name="BS朝日" tvg-logo="https://www.bs-asahi.co.jp/wp-content/themes/bs-master/img/head_logo.png" group-title="🇯🇵日本",BS朝日
+video://https://www.xhzb.tw/tv-show-20154-1.html
+#EXTINF:-1 tvg-name="朝日新聞" tvg-logo="https://news.tv-asahi.co.jp/img/common-img/tva_news-logo.png" group-title="🇯🇵日本",朝日新聞
 https://www.youtube.com/watch?v=coYw-eVU0Ks
 #EXTINF:-1 tvg-name="台视新闻" tvg-logo="https://live.fanmingming.com/tv/台视新闻.png" group-title="▶YOUTUBE",台视新闻
 https://www.youtube.com/watch?v=xL0ch83RAK8
@@ -144,7 +158,5 @@ https://www.youtube.com/watch?v=LuQ4S-i5zoE
 https://www.youtube.com/watch?v=wM0g8EoUZ_E
 #EXTINF:-1 tvg-name="三立新聞" tvg-logo="https://live.setn.com/Content/images/live-logo.png" group-title="▶YOUTUBE",三立新聞
 https://www.youtube.com/watch?v=oZdzzvxTfUY
-#EXTINF:-1 tvg-name="8视界" tvg-logo="https://www.8world.com/themes/custom/mc_8world_theme/favicon.ico" group-title="▶YOUTUBE",8视界
-https://www.youtube.com/watch?v=RvSOIM620bA
 #EXTINF:-1 tvg-name="全国风景总览" tvg-logo="https://live.fanmingming.com/tv/全国风景总览.png" group-title="🎏景区",全国风景总览
 https://gcalic.v.myalicdn.com/gc/wgw05_1/index.m3u8?contentid=2820180516001
