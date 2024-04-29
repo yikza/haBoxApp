@@ -126,7 +126,7 @@ video://https://live.mgtv.com/?channelId=346
 ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36
 #EXTINF:-1 tvg-name="湖南电视剧" tvg-logo="https://live.fanmingming.com/tv/湖南电视剧.png" group-title="🛰️卫视",湖南电视剧
 video://https://live.mgtv.com/?channelId=484
-#EXTINF:-1 tvg-name="朝日新聞" tvg-logo="https://news.tv-asahi.co.jp/img/common-img/tva_news-logo.png" group-title="🇯🇵日本",朝日新聞
+#EXTINF:-1 tvg-name="朝日新聞" tvg-logo="https://news.tv-asahi.co.jp/img/common-img/tva_news-logo.png" group-title="▶YOUTUBE",朝日新聞
 https://www.youtube.com/watch?v=coYw-eVU0Ks
 #EXTINF:-1 tvg-name="台视新闻" tvg-logo="https://live.fanmingming.com/tv/台视新闻.png" group-title="▶YOUTUBE",台视新闻
 https://www.youtube.com/watch?v=xL0ch83RAK8
