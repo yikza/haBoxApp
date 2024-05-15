@@ -6,7 +6,7 @@
     {"key":"csp_Olevod","name":"🐙欧乐影视","type":3,"api":"csp_Olevod","searchable":1,"quickSearch":1,"filterable":1},
     {"key":"csp_Douyu","name":"🐠鬥魚","type":3,"api":"csp_Douyu","searchable":1,"quickSearch":1,"filterable":1},
     {"key":"csp_Huya","name":"🐯虎牙","type":3,"api":"csp_Huya","searchable":1,"quickSearch":1,"filterable":1},
-    {"key":"csp_BiliBili","name":"🐠哔哩","type":3,"api":"csp_BiliBili","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://raw.githubusercontent.com/hikdo/tvbox/main/test/data/bili.json"},
+    {"key":"csp_BiliBili","name":"🐠哔哩","type":3,"api":"csp_BiliBili","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://raw.githubusercontent.com/hikdo/knyboxApp/main/test/data/bili.json"},
     {"key":"csp_Radio","name":"🔉收音机","type":3,"api":"csp_Radio","searchable":1,"quickSearch":0,"filterable":1},
     {"key":"push_agent","name":"📱推送","type": 3,"api": "csp_PushAgent","searchable": 0,"quickSearch": 0,"filterable":0}
   ],
@@ -19,8 +19,8 @@
     {"name": "xmflv","type": 0,"url": "https://jx.xmflv.com/?url=","ext": {"flag": ["qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩"]}},
     {"name": "剖云","type": 0,"url": "https://www.pouyun.com/?url=","ext": {"flag": ["qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩"]}}
   ],
-  "spider":"https://raw.githubusercontent.com/hikdo/tvbox/main/test/tvbox.jar;md5;ff01381cd4c3542695fa5de71ec51b2a",
-  "lives": [{"name":"test","url":"https://raw.githubusercontent.com/hikdo/tvbox/main/test/live.m3u"}],
+  "spider":"https://raw.githubusercontent.com/hikdo/knyboxApp/main/test/kny.jar;md5;ff01381cd4c3542695fa5de71ec51b2a",
+  "lives": [{"name":"test","url":"https://raw.githubusercontent.com/hikdo/knyboxApp/main/test/live.m3u"}],
   "flags":["youku","qq","QQ","iqiyi","qiyi","letv","sohu","tudou","pptv","PPTV","mgtv","ltnb","rx","SLYS4k","BYGA","BYGB","luanzi","dxzy","QEYSS","aliyun","AliS","122","chuangying","CL4K","xfyun","wuduzy","wasu","bilibili","renrenmi","xmm","xigua","m1905","funshion","优酷","芒果","腾讯","爱奇艺","奇艺","哔哩哔哩","哔哩","西瓜视频","腾讯视频","奇艺视频","优酷视频","芒果视频","乐视视频","FY","fy","FeiYun","feiyun","飞云"],
   "rules":[{"name":"海外看","hosts":["haiwaikan"],"regex":["8.16","9.99","10.0099","10.3333","16.0599","8.1748","12.33","10.85"]},{"name":"kuaikan","hosts":["kuaikan"],"regex":["10.032"]}],
   "ads":["iqiyi.hbuioo.com","vip.ffzyad.com","wan.51img1.com","mimg.0c1q0l.cn","www.googletagmanager.com","www.google-analytics.com","mc.usihnbcq.cn","mg.g1mm3d.cn","mscs.svaeuzh.cn","cnzz.hhttm.top","tp.vinuxhome.com","cnzz.mmstat.com","www.baihuillq.com","s23.cnzz.com","z3.cnzz.com","c.cnzz.com","stj.v1vo.top","z12.cnzz.com","img.mosflower.cn","tips.gamevvip.com","ehwe.yhdtns.com","xdn.cqqc3.com","www.jixunkyy.cn","sp.chemacid.cn","hm.baidu.com","s9.cnzz.com","z6.cnzz.com","um.cavuc.com","mav.mavuz.com","wofwk.aoidf3.com","z5.cnzz.com","xc.hubeijieshikj.cn","tj.tianwenhu.com","xg.gars57.cn","k.jinxiuzhilv.com","cdn.bootcss.com","ppl.xunzhuo123.com","xomk.jiangjunmh.top","img.xunzhuo123.com","z1.cnzz.com","s13.cnzz.com","xg.huataisangao.cn","z7.cnzz.com","xg.huataisangao.cn","z2.cnzz.com","s96.cnzz.com","q11.cnzz.com","thy.dacedsfa.cn","xg.whsbpw.cn","s19.cnzz.com","z8.cnzz.com","s4.cnzz.com","f5w.as12df.top","ae01.alicdn.com","www.92424.cn","k.wudejia.com","vivovip.mmszxc.top","qiu.xixiqiu.com","cdnjs.hnfenxun.com","cms.qdwght.com"]
