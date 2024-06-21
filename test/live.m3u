@@ -84,7 +84,27 @@ http://[2409:8087:5e01:34::22]:6610/ZTE_CMS/00000001000000060000000000000305/ind
 http://[2409:8087:5e01:34::22]:6610/ZTE_CMS/00000001000000060000000000000193/index.m3u8?IAS
 #EXTINF:-1 tvg-name="延边卫视" tvg-logo="https://live.fanmingming.com/tv/延边卫视.png" group-title="🛰️卫视",延边卫视
 http://[2409:8087:1a0b:df::4020]:80/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226516/index.m3u8
-#EXTINF:-1 tvg-name="【LIVE】渋谷" tvg-logo="https://news.tv-asahi.co.jp/img/common-img/tva_news-logo.png" group-title="🇯🇵日本",【LIVE】渋谷
-https://www.youtube.com/watch?v=RTwNEfirmks
+#EXTINF:-1 tvg-name="台视新闻" tvg-logo="https://news.ttv.com.tw/images/fav.png" group-title="▶YOUTUBE",台视新闻
+https://www.youtube.com/watch?v=xL0ch83RAK8
+#EXTINF:-1 tvg-name="民视新闻" tvg-logo="https://cdn.ftvnews.com.tw/client/images/favicons/favicon.png" group-title="▶YOUTUBE",民视新闻
+https://www.youtube.com/watch?v=ylYJSBUgaMA
+#EXTINF:-1 tvg-name="中视新闻" tvg-logo="https://www.ctv.com.tw/Cms_Data/Sites/CTV3/Themes/default/images/thumb/apple-touch-icon.png" group-title="▶YOUTUBE",中视新闻
+https://www.youtube.com/watch?v=TCnaIE_SAtM
+#EXTINF:-1 tvg-name="TVBS News" tvg-logo="https://live.fanmingming.com/tv/TVBS.png" group-title="▶YOUTUBE",TVBS新闻
+https://www.youtube.com/watch?v=m_dhMSvUCIc
+#EXTINF:-1 tvg-name="寰宇新闻" tvg-logo="https://live.fanmingming.com/tv/寰宇新闻.png" group-title="▶YOUTUBE",寰宇新闻
+https://www.youtube.com/watch?v=6IquAgfvYmc
+#EXTINF:-1 tvg-name="东森新闻" tvg-logo="https://img-fnc.ebc.net.tw/EbcFnc/logoes/mobile_logo.png" group-title="▶YOUTUBE",东森新闻
+https://www.youtube.com/watch?v=LuQ4S-i5zoE
+#EXTINF:-1 tvg-name="華視新聞" tvg-logo="https://www.cts.com.tw/images/2018cts/cts-logo.png" group-title="▶YOUTUBE",華視新聞
+https://www.youtube.com/watch?v=wM0g8EoUZ_E
+#EXTINF:-1 tvg-name="三立新聞" tvg-logo="https://attach.setn.com/images/2018_logo_B.png" group-title="▶YOUTUBE",三立新聞
+https://www.youtube.com/watch?v=oZdzzvxTfUY
+#EXTINF:-1 tvg-name="8视界" tvg-logo="https://live.fanmingming.com/tv/8视界.png" group-title="▶YOUTUBE",8视界
+https://www.youtube.com/watch?v=RvSOIM620bA
+#EXTINF:-1 tvg-name="【LIVE】東京" tvg-logo="https://news.tv-asahi.co.jp/img/common-img/tva_news-logo.png" group-title="🇯🇵日本",【LIVE】東京
+https://www.youtube.com/watch?v=cH7VBI4QQzA
+#EXTINF:-1 tvg-name="【LIVE】首爾" tvg-logo="https://news.tv-asahi.co.jp/img/common-img/tva_news-logo.png" group-title="🇰🇷韓國",【LIVE】首爾
+https://www.youtube.com/watch?v=mr41cCpwszE
 #EXTINF:-1 tvg-name="全国风景总览" tvg-logo="https://live.fanmingming.com/tv/全国风景总览.png" group-title="🎏景区",全国风景总览
 https://gcalic.v.myalicdn.com/gc/wgw05_1/index.m3u8?contentid=2820180516001
