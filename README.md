@@ -1,10 +1,6 @@
-# knybox
+# hahaBox
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-### Demo
-
-![](https://github.com/hikdo/tvbox/raw/main/demo/image.png) &nbsp;&nbsp;&nbsp;
 
 ## License
 
